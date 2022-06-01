@@ -13,9 +13,7 @@ const Routes = () => {
         <Route path="/" element={<Home />} />
         <Route
           path="/todo"
-          element={
-              <Todos />
-          }
+          element={<Todos />}
         />
       </ReactRouterRoutes>
     </Router>
