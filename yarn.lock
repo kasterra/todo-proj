@@ -8017,6 +8017,43 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jotai@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "jotai@npm:1.7.0"
+  peerDependencies:
+    "@babel/core": "*"
+    "@babel/template": "*"
+    "@urql/core": "*"
+    immer: "*"
+    optics-ts: "*"
+    react: ">=16.8"
+    react-query: "*"
+    valtio: "*"
+    wonka: "*"
+    xstate: "*"
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+    "@babel/template":
+      optional: true
+    "@urql/core":
+      optional: true
+    immer:
+      optional: true
+    optics-ts:
+      optional: true
+    react-query:
+      optional: true
+    valtio:
+      optional: true
+    wonka:
+      optional: true
+    xstate:
+      optional: true
+  checksum: 463ac19ef81265b9a15095a10997467e00fe799460abd8fd11a03f62137ae0b0e94796ae3e5c7ca147ed260cbc6424000ed897a8b58d1cbb061115d241d73804
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -12002,6 +12039,7 @@ __metadata:
     eslint-plugin-react: ^7.30.0
     eslint-plugin-react-hooks: ^4.5.0
     eslint-plugin-testing-library: ^5.5.1
+    jotai: ^1.7.0
     prettier: ^2.6.2
     react: ^18.1.0
     react-beautiful-dnd: ^13.1.0

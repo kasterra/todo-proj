@@ -59,6 +59,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:7.30.0"],\
             ["eslint-plugin-react-hooks", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:4.5.0"],\
             ["eslint-plugin-testing-library", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:5.5.1"],\
+            ["jotai", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:1.7.0"],\
             ["prettier", "npm:2.6.2"],\
             ["react", "npm:18.1.0"],\
             ["react-beautiful-dnd", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.1.0"],\
@@ -11369,6 +11370,64 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["jotai", [\
+        ["npm:1.7.0", {\
+          "packageLocation": "./.yarn/cache/jotai-npm-1.7.0-4cf00a4d89-463ac19ef8.zip/node_modules/jotai/",\
+          "packageDependencies": [\
+            ["jotai", "npm:1.7.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:1.7.0", {\
+          "packageLocation": "./.yarn/__virtual__/jotai-virtual-9bc5d97f69/0/cache/jotai-npm-1.7.0-4cf00a4d89-463ac19ef8.zip/node_modules/jotai/",\
+          "packageDependencies": [\
+            ["jotai", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:1.7.0"],\
+            ["@babel/core", null],\
+            ["@babel/template", null],\
+            ["@types/babel__core", null],\
+            ["@types/babel__template", null],\
+            ["@types/immer", null],\
+            ["@types/optics-ts", null],\
+            ["@types/react", "npm:18.0.9"],\
+            ["@types/react-query", null],\
+            ["@types/urql__core", null],\
+            ["@types/valtio", null],\
+            ["@types/wonka", null],\
+            ["@types/xstate", null],\
+            ["@urql/core", null],\
+            ["immer", null],\
+            ["optics-ts", null],\
+            ["react", "npm:18.1.0"],\
+            ["react-query", null],\
+            ["valtio", null],\
+            ["wonka", null],\
+            ["xstate", null]\
+          ],\
+          "packagePeers": [\
+            "@babel/core",\
+            "@babel/template",\
+            "@types/babel__core",\
+            "@types/babel__template",\
+            "@types/immer",\
+            "@types/optics-ts",\
+            "@types/react-query",\
+            "@types/react",\
+            "@types/urql__core",\
+            "@types/valtio",\
+            "@types/wonka",\
+            "@types/xstate",\
+            "@urql/core",\
+            "immer",\
+            "optics-ts",\
+            "react-query",\
+            "react",\
+            "valtio",\
+            "wonka",\
+            "xstate"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["js-tokens", [\
         ["npm:4.0.0", {\
           "packageLocation": "./.yarn/cache/js-tokens-npm-4.0.0-0ac852e9e2-8a95213a5a.zip/node_modules/js-tokens/",\
@@ -16660,6 +16719,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:7.30.0"],\
             ["eslint-plugin-react-hooks", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:4.5.0"],\
             ["eslint-plugin-testing-library", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:5.5.1"],\
+            ["jotai", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:1.7.0"],\
             ["prettier", "npm:2.6.2"],\
             ["react", "npm:18.1.0"],\
             ["react-beautiful-dnd", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.1.0"],\
