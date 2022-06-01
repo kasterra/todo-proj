@@ -11,10 +11,21 @@ var conf = Config{}
 
 type Config struct {
 	Local Local `yaml:"Local"`
+	DB    DB    `yaml:"DB"`
 }
 
 type Local struct {
 	Port int `yaml:"Port"`
+}
+
+type DB struct {
+	Host     string `yaml:"Host"`
+	Port     string `yaml:"Port"`
+	User     string `yaml:"User"`
+	Password string `yaml:"Password"`
+	Database string `yaml:"Database"`
+	Ssl      string `yaml:"Ssl"`
+	Timezone string `yaml:"Timezone"`
 }
 
 func InitConfig() {
