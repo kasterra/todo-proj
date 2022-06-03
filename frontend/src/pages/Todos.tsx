@@ -1,7 +1,7 @@
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
 import { useAtom } from 'jotai';
-import { toDoState } from 'atoms';
+import { toDoState } from 'atoms/todoAtoms';
 import Board from 'components/Board';
 
 const Wrapper = styled.div`

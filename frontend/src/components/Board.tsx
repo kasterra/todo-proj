@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { useSetAtom } from 'jotai';
 import { Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
-import { IToDo, toDoState } from 'atoms';
+import { IToDo, toDoState } from 'atoms/todoAtoms';
 import DraggableCard from './DraggableCard';
 
 const Wrapper = styled.div`
