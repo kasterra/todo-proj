@@ -1,12 +1,14 @@
 import React from 'react';
 import { css, Global } from '@emotion/react';
 import normalize from 'emotion-normalize';
-import Routes from './pages/Routes';
 import { theme as chakraTheme } from '@chakra-ui/react';
+import { Toaster } from 'react-hot-toast';
+import Routes from './pages/Routes';
 
 const App = () => {
   return (
     <>
+      <Toaster position="top-center" reverseOrder={false} />
       <Global
         styles={css`
           ${normalize}
@@ -14,6 +16,7 @@ const App = () => {
             box-sizing: border-box;
             background-color: transparent;
             border: none;
+            font: ${chakraTheme.fonts.body};
           }
           a {
             text-decoration: none;
@@ -21,7 +24,6 @@ const App = () => {
           }
           body {
             background-color: #f5f5f5;
-            font: ${chakraTheme.fonts.body};
           }
           h1,
           h2,
