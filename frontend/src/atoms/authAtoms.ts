@@ -4,6 +4,14 @@ export interface IAuth {
   token: string;
 }
 
-export const authState = atom({
-  token: '',
-});
+const internalAuthAtom = atom(
+  (localStorage.getItem('authAtom') as string) ?? '',
+);
+
+export const authAtom = atom(
+  get => get(internalAuthAtom),
+  (_, set, newToken: string) => {
+    set(internalAuthAtom, newToken);
+    localStorage.setItem('authAtom', newToken);
+  },
+);

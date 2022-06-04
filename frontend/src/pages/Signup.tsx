@@ -24,7 +24,7 @@ const Container = styled.div`
 `;
 
 interface IFormInputs {
-  nickname: string;
+  name: string;
   email: string;
   password: string;
   password2: string;
@@ -42,11 +42,18 @@ const Signup = () => {
   });
   const onSubmit = async (data: IFormInputs) => {
     toast
-      .promise(axios.post('/api/signup', data), {
-        loading: 'Loading',
-        success: 'Account Created Successfully',
-        error: err => err.response.data,
-      })
+      .promise(
+        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/SignUp`, {
+          Name: data.name,
+          Email: data.email,
+          Password: data.password,
+        }),
+        {
+          loading: 'Loading',
+          success: 'Account Created Successfully',
+          error: err => err.response.data,
+        },
+      )
       .then(() => navigate('/login'));
   };
   return (
@@ -67,14 +74,12 @@ const Signup = () => {
           </Title>
           <Input
             type="text"
-            {...register('nickname', {
-              required: 'nickname is required',
+            {...register('name', {
+              required: 'name is required',
             })}
-            placeholder="nickname"
+            placeholder="name"
           />
-          {errors.nickname?.message && (
-            <FormError>{errors.nickname.message}</FormError>
-          )}
+          {errors.name?.message && <FormError>{errors.name.message}</FormError>}
           <Input
             type="email"
             {...register('email', {

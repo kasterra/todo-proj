@@ -4,13 +4,10 @@ import MockAdapter from 'axios-mock-adapter';
 const mockAxios = axios.create();
 const mock = new MockAdapter(mockAxios, { delayResponse: 500 });
 
-mock.onPost('/api/signup').reply(config => {
+mock.onPost('/api/user/SignUp').reply(config => {
   const data = JSON.parse(config.data);
   const errors: string[] = [];
 
-  if (data.nickname === 'dup') {
-    errors.push('name already exists');
-  }
   if (data.email === 'dup@dup.com') {
     errors.push('email already exists');
   }
@@ -22,11 +19,12 @@ mock.onPost('/api/signup').reply(config => {
   return [202];
 });
 
-mock.onPost('/api/login').reply(config => {
+mock.onPost('api/user/SignIn').reply(config => {
   const data = JSON.parse(config.data);
   const errors: string[] = [];
 
-  if (data.ID === 'wrong' || data.password == 'wrong') {
+  console.log(data);
+  if (data.Email === 'wrong' || data.Password == 'wrong') {
     errors.push('ID or password is wrong');
   }
 
@@ -34,7 +32,13 @@ mock.onPost('/api/login').reply(config => {
     return [400, errors];
   }
 
-  return [200];
+  return [200, { Token: 'aaaaaa' }];
+});
+
+mock.onGet('api/user/Token').reply(config => {
+  const auth = config.headers!.Authorization;
+  console.log('auth', auth);
+  return [200, { Name: 'lorem', Email: 'lorem@example.com' }];
 });
 
 export default mockAxios;

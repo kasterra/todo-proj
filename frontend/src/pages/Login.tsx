@@ -14,6 +14,8 @@ import {
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useSetAtom } from 'jotai';
+import { authAtom } from 'atoms/authAtoms';
 
 const Container = styled.div`
   display: flex;
@@ -23,18 +25,28 @@ const Container = styled.div`
 `;
 interface IFormInputs {
   ID: string;
-  password: string;
+  Password: string;
 }
 const Login = () => {
   const navigate = useNavigate();
+  const setAuthAtom = useSetAtom(authAtom);
   const onSubmit = async (data: IFormInputs) => {
     toast
-      .promise(axios.post('/api/login', data), {
-        loading: 'Loading',
-        success: 'Login successful',
-        error: e => e.response.data,
-      })
-      .then(() => navigate('/'));
+      .promise(
+        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/SignIn`, {
+          Email: data.ID,
+          Password: data.Password,
+        }),
+        {
+          loading: 'Loading',
+          success: 'Login successful',
+          error: e => e.response.data,
+        },
+      )
+      .then(res => {
+        setAuthAtom(res.data.Token);
+        navigate('/');
+      });
   };
   const {
     register,
@@ -59,20 +71,20 @@ const Login = () => {
           <Input
             type="text"
             {...register('ID', {
-              required: 'nickname or email is required',
+              required: 'email info is required',
             })}
-            placeholder="nickname or email"
+            placeholder="email"
           />
           {errors.ID?.message && <FormError>{errors.ID.message}</FormError>}
           <Input
             type="password"
-            {...register('password', {
+            {...register('Password', {
               required: 'password is required',
             })}
             placeholder="password"
           />
-          {errors.password?.message && (
-            <FormError>{errors.password.message}</FormError>
+          {errors.Password?.message && (
+            <FormError>{errors.Password.message}</FormError>
           )}
           <MidBtn
             type="submit"

@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import { authState } from 'atoms/authAtoms';
-import { useAtomValue } from 'jotai';
+import { authAtom } from 'atoms/authAtoms';
+import { useAtomValue, useSetAtom } from 'jotai';
 import { Link } from 'react-router-dom';
 import { theme } from '@chakra-ui/react';
+import toast from 'react-hot-toast';
 
 const Container = styled.div`
   background-color: #fff;
@@ -34,17 +35,24 @@ const Button = styled.div`
     margin-right: 8px;
   }
 `;
-const SignOutBtn = () => (
-  <Button
-    css={css`
-      background: ${theme.colors.red[500]};
-      color: white;
-    `}
-  >
-    <img src="/icons/log-out-03.svg" alt="signup" />
-    <span>Log out</span>
-  </Button>
-);
+const SignOutBtn = () => {
+  const setToken = useSetAtom(authAtom);
+  return (
+    <Button
+      css={css`
+        background: ${theme.colors.red[500]};
+        color: white;
+      `}
+      onClick={() => {
+        toast.success('logout successful');
+        setToken('');
+      }}
+    >
+      <img src="/icons/log-out-03.svg" alt="signup" />
+      <span>Log out</span>
+    </Button>
+  );
+};
 
 const NotLoggedInBtns = () => {
   return (
@@ -76,7 +84,7 @@ const NotLoggedInBtns = () => {
 };
 
 const Header = () => {
-  const { token } = useAtomValue(authState);
+  const token = useAtomValue(authAtom);
   return (
     <Container>
       <img src="/logo/top%20logo.svg" alt="logo" />
