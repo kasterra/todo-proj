@@ -1,14 +1,8 @@
-import { ThemeProvider } from "@emotion/react";
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import { appTheme } from "./themes/appTheme";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement,
 );
-root.render(
-  <ThemeProvider theme={appTheme}>
-    <App />
-  </ThemeProvider>
-);
+root.render(<App />);
