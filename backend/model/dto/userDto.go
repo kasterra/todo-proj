@@ -6,6 +6,7 @@ type UserDto struct {
 	Name     string `form:"Name"`
 	Email    string `form:"ID"`
 	Password string `form:"Password"`
+	Token    string `fomr:"Jwt"`
 }
 
 // only provisional

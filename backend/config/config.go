@@ -10,8 +10,9 @@ import (
 var conf = Config{}
 
 type Config struct {
-	Local Local `yaml:"Local"`
-	DB    DB    `yaml:"DB"`
+	Local  Local  `yaml:"Local"`
+	JWTKey string `yaml:"JWTKey"`
+	DB     DB     `yaml:"DB"`
 }
 
 type Local struct {

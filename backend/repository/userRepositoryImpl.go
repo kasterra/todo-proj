@@ -27,5 +27,17 @@ func (userRepositoryImpl *UserRepositoryImpl) Save(user *model.User) (*model.Use
 			return user, nil
 		}
 	}
-	return nil, errors.New("중복된 유저입니다.")
+	return nil, errors.New("User is already exists")
+}
+
+func (userRepositoryImpl *UserRepositoryImpl) InquireFromEmail(user *model.User) (*model.User, error) {
+	var userCheck = new(model.User)
+	err := userRepositoryImpl.db.Where("email = ?", user.Email).First(&userCheck).Error
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("No user")
+		}
+		return nil, err
+	}
+	return userCheck, nil
 }
