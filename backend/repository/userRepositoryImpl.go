@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 	"todo/model"
 
 	"gorm.io/gorm"
@@ -16,18 +17,11 @@ func NewUserRepositoryImpl(db *gorm.DB) *UserRepositoryImpl {
 }
 
 func (userRepositoryImpl *UserRepositoryImpl) Save(user *model.User) (*model.User, error) {
-	var userCheck = new(model.User)
-	err1 := userRepositoryImpl.db.Where("name = ?", user.Name).First(&userCheck).Error
-	if err1 != nil {
-		if errors.Is(err1, gorm.ErrRecordNotFound) {
-			err2 := userRepositoryImpl.db.Create(user).Error
-			if err2 != nil {
-				return nil, err2
-			}
-			return user, nil
-		}
+	err := userRepositoryImpl.db.Create(user).Error
+	if err != nil {
+		return nil, errors.New("User Create Error")
 	}
-	return nil, errors.New("User is already exists")
+	return user, nil
 }
 
 func (userRepositoryImpl *UserRepositoryImpl) InquireFromEmail(user *model.User) (*model.User, error) {
@@ -35,7 +29,7 @@ func (userRepositoryImpl *UserRepositoryImpl) InquireFromEmail(user *model.User)
 	err := userRepositoryImpl.db.Where("email = ?", user.Email).First(&userCheck).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("No user")
+			return nil, errors.New(fmt.Sprintf("No user that have %s email", user.Email))
 		}
 		return nil, err
 	}

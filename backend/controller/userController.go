@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"todo/controller/response"
 	"todo/model/dto"
 	"todo/service"
 	"todo/service/auth"
@@ -38,18 +39,17 @@ func (userController *UserController) SignUp(c echo.Context) error {
 
 	if err != nil {
 		c.Logger().Error(err)
-		// TODO: error 처리 json으로 자세하게 보내주기 -> 아마 에러 처리하는 로직을 하나 만들 것 같음
-		return c.String(http.StatusBadRequest, "User info bind error")
+		return response.ReturnApiFail(c, http.StatusBadRequest, err, "User info bind error")
 	}
 
 	user, err := userController.UserService.SignUp(userDto)
 	if err != nil {
 		c.Logger().Error(err)
-		return c.String(http.StatusInternalServerError, "Create User Error")
+		return response.ReturnApiFail(c, http.StatusInternalServerError, err, "User Sign up Error")
 	}
 
 	c.Logger().Info(user)
-	return c.JSON(http.StatusOK, user)
+	return response.ReturnApiSuccess(c, http.StatusOK, user)
 }
 
 func (userController *UserController) SignIn(c echo.Context) error {
@@ -60,31 +60,30 @@ func (userController *UserController) SignIn(c echo.Context) error {
 
 	if err != nil {
 		c.Logger().Error(err)
-		// TODO: error 처리 json으로 자세하게 보내주기 -> 아마 에러 처리하는 로직을 하나 만들 것 같음
-		return c.String(http.StatusBadRequest, "User info bind error")
+		return response.ReturnApiFail(c, http.StatusBadRequest, err, "User info bind error")
 	}
 
 	user, err := userController.UserService.SignIn(userDto)
 	if err != nil {
 		c.Logger().Error(err)
-		return c.String(http.StatusInternalServerError, "Sign in Error")
+		return response.ReturnApiFail(c, http.StatusInternalServerError, err, "User Sign in Error")
 	}
 
 	c.Logger().Info(user)
-	return c.JSON(http.StatusOK, user)
+	return response.ReturnApiSuccess(c, http.StatusOK, user)
 }
 
 func (userController *UserController) CheckToken(c echo.Context) error {
 	email, err := auth.TokenValid(c.Request())
 	if err != nil {
-		return err
+		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Token was not valid")
 	}
 
 	userDto := &dto.UserDto{Email: email}
 
 	user, err := userController.UserService.FindUserFromEmail(userDto)
 	if err != nil {
-		return err
+		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Wrong Token")
 	}
 	return c.JSON(http.StatusOK, user)
 }
