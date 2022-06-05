@@ -22,6 +22,9 @@ const App = () => {
             text-decoration: none;
             color: inherit;
           }
+          button {
+            cursor: pointer;
+          }
           body {
             background-color: #f5f5f5;
           }

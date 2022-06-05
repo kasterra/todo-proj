@@ -24,7 +24,7 @@ const Buttons = styled.div`
   margin-right: 25px;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
   height: 40px;
   padding: 10px 16px;
   display: flex;
@@ -87,7 +87,9 @@ const Header = () => {
   const token = useAtomValue(authAtom);
   return (
     <Container>
-      <img src="/logo/top%20logo.svg" alt="logo" />
+      <Link to="/">
+        <img src="/logo/top%20logo.svg" alt="logo" />
+      </Link>
       <Buttons>{token === '' ? <NotLoggedInBtns /> : <SignOutBtn />}</Buttons>
     </Container>
   );
