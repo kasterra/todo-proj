@@ -3,7 +3,10 @@ import Header from 'components/Header';
 import styled from '@emotion/styled';
 import { theme as chakraTheme } from '@chakra-ui/react';
 import { css } from '@emotion/react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAtomValue } from 'jotai';
+import { authAtom } from 'atoms/authAtoms';
 
 const Container = styled.div`
   display: flex;
@@ -56,6 +59,14 @@ const RoleText = styled.h4`
 `;
 
 const Home = () => {
+  const navigate = useNavigate();
+  const auth = useAtomValue(authAtom);
+  useEffect(() => {
+    if (auth) {
+      navigate('/dashboard');
+    }
+    console.log(auth);
+  }, [auth]);
   return (
     <>
       <Header />

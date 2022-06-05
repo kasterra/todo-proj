@@ -15,6 +15,9 @@ import {
   Divider,
 } from 'components/FormComponents';
 import toast from 'react-hot-toast';
+import { authAtom } from 'atoms/authAtoms';
+import { useAtomValue } from 'jotai';
+import { useCallback, useEffect } from 'react';
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +35,8 @@ interface IFormInputs {
 
 const Signup = () => {
   const navigate = useNavigate();
+  const auth = useAtomValue(authAtom);
+
   const {
     register,
     handleSubmit,
@@ -40,7 +45,8 @@ const Signup = () => {
   } = useForm<IFormInputs>({
     criteriaMode: 'all',
   });
-  const onSubmit = async (data: IFormInputs) => {
+
+  const onSubmit = useCallback(async (data: IFormInputs) => {
     toast
       .promise(
         axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/SignUp`, {
@@ -55,7 +61,14 @@ const Signup = () => {
         },
       )
       .then(() => navigate('/login'));
-  };
+  }, []);
+
+  useEffect(() => {
+    if (auth) {
+      navigate('/dashboard');
+    }
+  }, []);
+
   return (
     <Container>
       <Link to="/">
