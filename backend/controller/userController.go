@@ -85,5 +85,5 @@ func (userController *UserController) CheckToken(c echo.Context) error {
 	if err != nil {
 		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Wrong Token")
 	}
-	return c.JSON(http.StatusOK, user)
+	return response.ReturnApiSuccess(c, http.StatusOK, user)
 }
