@@ -8,8 +8,11 @@ import (
 	"todo/repository"
 	"todo/service"
 
+	_ "todo/docs"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"gorm.io/gorm"
 )
 
@@ -23,6 +26,8 @@ func (server Server) Init() {
 
 	e := echo.New()
 
+	e.Use(middleware.Logger())
+
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		// AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
@@ -33,6 +38,8 @@ func (server Server) Init() {
 
 	userController := server.GetInjectedUserController()
 	userController.InitRouter(e.Group("/user"))
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", conf.Local.Port)))
 }

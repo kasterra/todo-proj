@@ -31,6 +31,17 @@ func (userController *UserController) InitRouter(e *echo.Group) {
 	e.GET("/Token", userController.CheckToken)
 }
 
+// @Summary Sign up
+// @Description Save user's info
+// @Accept json
+// @Produce json
+// @Param Name body string true "User's name"
+// @Param Email body string true "User's email"
+// @Param Password body string true "User password"
+// @Success 200 {object} dto.UserDto "password, token are empty"
+// @Failure 400 {object} response.apiErrorResponse "when user binding fail -> body data was not vaild"
+// @Failure 500 {object} response.apiErrorResponse "when user save fail-> user is already exists"
+// @Router /user/SignUp [post]
 func (userController *UserController) SignUp(c echo.Context) error {
 	var err error
 	userDto := &dto.UserDto{}
@@ -52,6 +63,16 @@ func (userController *UserController) SignUp(c echo.Context) error {
 	return response.ReturnApiSuccess(c, http.StatusOK, user)
 }
 
+// @Summary Sign in
+// @Description Get JWT token
+// @Accept json
+// @Produce json
+// @Param Email body string true "User's email"
+// @Param Password body string true "User's password"
+// @Success 200 {object} dto.UserDto "Only Jwt"
+// @Failure 400 {object} response.apiErrorResponse "when user binding fail -> body data was not vaild"
+// @Failure 500 {object} response.apiErrorResponse "when user sign in error -> wrong data"
+// @Router /user/SignIn [post]
 func (userController *UserController) SignIn(c echo.Context) error {
 	var err error
 	userDto := &dto.UserDto{}
@@ -73,6 +94,13 @@ func (userController *UserController) SignIn(c echo.Context) error {
 	return response.ReturnApiSuccess(c, http.StatusOK, user)
 }
 
+// @Summary Check Token
+// @Description Get User info using token
+// @Produce json
+// @Param Token header string true "Authorization"
+// @Success 200 {object} dto.UserDto "User's info"
+// @Failure 401 {object} response.apiErrorResponse "when token was not vaild"
+// @Router /user/Token [get]
 func (userController *UserController) CheckToken(c echo.Context) error {
 	email, err := auth.TokenValid(c.Request())
 	if err != nil {

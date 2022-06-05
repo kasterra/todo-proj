@@ -1,0 +1,121 @@
+basePath: /
+definitions:
+  dto.UserDto:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      token:
+        type: string
+    type: object
+  response.apiErrorResponse:
+    properties:
+      details: {}
+      message:
+        type: string
+    type: object
+host: '{host}:8080'
+info:
+  contact: {}
+  title: Todo Swagger
+  version: "1.0"
+paths:
+  /user/SignIn:
+    post:
+      consumes:
+      - application/json
+      description: Get JWT token
+      parameters:
+      - description: User's email
+        in: body
+        name: Email
+        required: true
+        schema:
+          type: string
+      - description: User's password
+        in: body
+        name: Password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Only Jwt
+          schema:
+            $ref: '#/definitions/dto.UserDto'
+        "400":
+          description: when user binding fail -> body data was not vaild
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+        "500":
+          description: when user sign in error -> wrong data
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+      summary: Sign in
+  /user/SignUp:
+    post:
+      consumes:
+      - application/json
+      description: Save user's info
+      parameters:
+      - description: User's name
+        in: body
+        name: Name
+        required: true
+        schema:
+          type: string
+      - description: User's email
+        in: body
+        name: Email
+        required: true
+        schema:
+          type: string
+      - description: User password
+        in: body
+        name: Password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: password, token are empty
+          schema:
+            $ref: '#/definitions/dto.UserDto'
+        "400":
+          description: when user binding fail -> body data was not vaild
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+        "500":
+          description: when user save fail-> user is already exists
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+      summary: Sign up
+  /user/Token:
+    get:
+      description: Get User info using token
+      parameters:
+      - description: Authorization
+        in: header
+        name: Token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User's info
+          schema:
+            $ref: '#/definitions/dto.UserDto'
+        "401":
+          description: when token was not vaild
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+      summary: Check Token
+swagger: "2.0"
