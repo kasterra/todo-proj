@@ -3,12 +3,23 @@ import { css, Global } from '@emotion/react';
 import normalize from 'emotion-normalize';
 import { theme as chakraTheme } from '@chakra-ui/react';
 import { Toaster } from 'react-hot-toast';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import Routes from './pages/Routes';
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <>
-      <Toaster position="top-center" reverseOrder={false} />
+    <QueryClientProvider client={queryClient}>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+        toastOptions={{
+          custom: {
+            duration: 5000,
+          },
+        }}
+      />
       <Global
         styles={css`
           ${normalize}
@@ -22,7 +33,7 @@ const App = () => {
             text-decoration: none;
             color: inherit;
           }
-          button {
+          button:not([disabled]) {
             cursor: pointer;
           }
           body {
@@ -40,7 +51,7 @@ const App = () => {
         `}
       />
       <Routes />
-    </>
+    </QueryClientProvider>
   );
 };
 
