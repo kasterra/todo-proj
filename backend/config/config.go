@@ -11,7 +11,7 @@ var conf = Config{}
 
 type Config struct {
 	Local  Local  `yaml:"Local"`
-	JWTKey string `yaml:"JWTKey"`
+	Secret Secret `yaml:"Secret"`
 	DB     DB     `yaml:"DB"`
 }
 
@@ -27,6 +27,11 @@ type DB struct {
 	Database string `yaml:"Database"`
 	Ssl      string `yaml:"Ssl"`
 	Timezone string `yaml:"Timezone"`
+}
+
+type Secret struct {
+	TokenAccess  string `yaml:"TokenAccess"`
+	TokenRefresh string `yaml:"TokenRefresh"`
 }
 
 func InitConfig() {

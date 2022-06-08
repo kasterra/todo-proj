@@ -2,13 +2,15 @@ basePath: /
 definitions:
   dto.UserDto:
     properties:
+      accessToken:
+        type: string
       email:
         type: string
       name:
         type: string
       password:
         type: string
-      token:
+      refreshToken:
         type: string
     type: object
   response.apiErrorResponse:
@@ -23,6 +25,25 @@ info:
   title: Todo Swagger
   version: "1.0"
 paths:
+  /user/Logout:
+    get:
+      description: Logout
+      parameters:
+      - description: Authorization AccessToken
+        in: header
+        name: Token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: ""
+        "401":
+          description: when token was not vaild
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+      summary: Logout
   /user/SignIn:
     post:
       consumes:
@@ -45,7 +66,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: Only Jwt
+          description: Access token, Refresh token
           schema:
             $ref: '#/definitions/dto.UserDto'
         "400":
@@ -101,7 +122,7 @@ paths:
     get:
       description: Get User info using token
       parameters:
-      - description: Authorization
+      - description: Authorization AccessToken
         in: header
         name: Token
         required: true

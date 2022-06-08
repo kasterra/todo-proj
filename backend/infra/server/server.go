@@ -10,6 +10,7 @@ import (
 
 	_ "todo/docs"
 
+	"github.com/jasonlvhit/gocron"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
@@ -17,12 +18,25 @@ import (
 )
 
 type Server struct {
-	DB *gorm.DB
+	DB     *gorm.DB
+	tkRepo *repository.TokenRepositoryImpl
 }
 
 func (server Server) Init() {
 
 	conf := config.GetConfig()
+
+	server.tkRepo = repository.NewTokenRepositoryImpl(server.DB)
+
+	go func() {
+		gocron.Every(1).Minute().Do(func() {
+			err := server.tkRepo.Expire()
+			if err != nil {
+				fmt.Println(err)
+			}
+		})
+		<-gocron.Start()
+	}()
 
 	e := echo.New()
 
@@ -46,7 +60,7 @@ func (server Server) Init() {
 
 func (server *Server) GetInjectedUserController() *controller.UserController {
 	userRepo := repository.NewUserRepositoryImpl(server.DB)
-	userService := service.NewUserServiceImpl(userRepo)
+	userService := service.NewUserServiceImpl(userRepo, server.tkRepo)
 	userController := controller.NewUserController(userService)
 	return userController
 }

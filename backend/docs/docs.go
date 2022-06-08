@@ -16,6 +16,35 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/user/Logout": {
+            "get": {
+                "description": "Logout",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Logout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization AccessToken",
+                        "name": "Token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": "when token was not vaild",
+                        "schema": {
+                            "$ref": "#/definitions/response.apiErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/SignIn": {
             "post": {
                 "description": "Get JWT token",
@@ -48,7 +77,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "Only Jwt",
+                        "description": "Access token, Refresh token",
                         "schema": {
                             "$ref": "#/definitions/dto.UserDto"
                         }
@@ -139,7 +168,7 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authorization",
+                        "description": "Authorization AccessToken",
                         "name": "Token",
                         "in": "header",
                         "required": true
@@ -166,6 +195,9 @@ const docTemplate = `{
         "dto.UserDto": {
             "type": "object",
             "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -175,7 +207,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }

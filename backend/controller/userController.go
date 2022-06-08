@@ -29,6 +29,9 @@ func (userController *UserController) InitRouter(e *echo.Group) {
 
 	// check Token
 	e.GET("/Token", userController.CheckToken)
+
+	// logout
+	e.GET("/Logout", userController.Logout)
 }
 
 // @Summary Sign up
@@ -69,7 +72,7 @@ func (userController *UserController) SignUp(c echo.Context) error {
 // @Produce json
 // @Param Email body string true "User's email"
 // @Param Password body string true "User's password"
-// @Success 200 {object} dto.UserDto "Only Jwt"
+// @Success 200 {object} dto.UserDto "Access token, Refresh token"
 // @Failure 400 {object} response.apiErrorResponse "when user binding fail -> body data was not vaild"
 // @Failure 500 {object} response.apiErrorResponse "when user sign in error -> wrong data"
 // @Router /user/SignIn [post]
@@ -97,21 +100,39 @@ func (userController *UserController) SignIn(c echo.Context) error {
 // @Summary Check Token
 // @Description Get User info using token
 // @Produce json
-// @Param Token header string true "Authorization"
+// @Param Token header string true "Authorization AccessToken"
 // @Success 200 {object} dto.UserDto "User's info"
 // @Failure 401 {object} response.apiErrorResponse "when token was not vaild"
 // @Router /user/Token [get]
 func (userController *UserController) CheckToken(c echo.Context) error {
-	email, err := auth.TokenValid(c.Request())
+	accessDetail, err := auth.TokenValid(c.Request())
 	if err != nil {
 		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Token was not valid")
 	}
 
-	userDto := &dto.UserDto{Email: email}
-
-	user, err := userController.UserService.FindUserFromEmail(userDto)
+	user, err := userController.UserService.InquireUserInfoFromToken(accessDetail)
 	if err != nil {
 		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Wrong Token")
 	}
 	return response.ReturnApiSuccess(c, http.StatusOK, user)
+}
+
+// @Summary Logout
+// @Description Logout
+// @Produce json
+// @Param Token header string true "Authorization AccessToken"
+// @Success 204
+// @Failure 401 {object} response.apiErrorResponse "when token was not vaild"
+// @Router /user/Logout [get]
+func (userController *UserController) Logout(c echo.Context) error {
+	accessDetail, err := auth.TokenValid(c.Request())
+	if err != nil {
+		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Token was not valid")
+	}
+
+	err = userController.UserService.Logout(accessDetail)
+	if err != nil {
+		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Wrong Token")
+	}
+	return response.ReturnApiSuccess(c, http.StatusNoContent, "")
 }

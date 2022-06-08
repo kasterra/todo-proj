@@ -3,10 +3,11 @@ package dto
 import "todo/model"
 
 type UserDto struct {
-	Name     string `form:"Name"`
-	Email    string `form:"ID"`
-	Password string `form:"Password"`
-	Token    string `fomr:"Jwt"`
+	Name         string `form:"Name,omitempty"`
+	Email        string `form:"ID,omitempty"`
+	Password     string `form:"Password,omitempty"`
+	AccessToken  string `fomr:"AccessToken,omitempty"`
+	RefreshToken string `fomr:"RefreshToken,omitempty"`
 }
 
 // only provisional

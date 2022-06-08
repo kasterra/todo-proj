@@ -8,6 +8,35 @@
     "host": "{host}:8080",
     "basePath": "/",
     "paths": {
+        "/user/Logout": {
+            "get": {
+                "description": "Logout",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Logout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization AccessToken",
+                        "name": "Token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": ""
+                    },
+                    "401": {
+                        "description": "when token was not vaild",
+                        "schema": {
+                            "$ref": "#/definitions/response.apiErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/SignIn": {
             "post": {
                 "description": "Get JWT token",
@@ -40,7 +69,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Only Jwt",
+                        "description": "Access token, Refresh token",
                         "schema": {
                             "$ref": "#/definitions/dto.UserDto"
                         }
@@ -131,7 +160,7 @@
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Authorization",
+                        "description": "Authorization AccessToken",
                         "name": "Token",
                         "in": "header",
                         "required": true
@@ -158,6 +187,9 @@
         "dto.UserDto": {
             "type": "object",
             "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -167,7 +199,7 @@
                 "password": {
                     "type": "string"
                 },
-                "token": {
+                "refreshToken": {
                     "type": "string"
                 }
             }

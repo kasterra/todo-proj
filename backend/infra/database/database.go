@@ -34,6 +34,7 @@ func (DB) GetDB() *gorm.DB {
 	}
 
 	db.AutoMigrate(&model.User{})
+	db.AutoMigrate(&model.TokenInfo{})
 
 	return db
 }

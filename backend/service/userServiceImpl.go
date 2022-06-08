@@ -12,10 +12,11 @@ import (
 
 type UserServiceImpl struct {
 	repository.UserRepository
+	repository.TokenRepository
 }
 
-func NewUserServiceImpl(repo repository.UserRepository) *UserServiceImpl {
-	return &UserServiceImpl{UserRepository: repo}
+func NewUserServiceImpl(userRepo repository.UserRepository, tokenRepo repository.TokenRepository) *UserServiceImpl {
+	return &UserServiceImpl{UserRepository: userRepo, TokenRepository: tokenRepo}
 }
 
 func (userServiceImpl *UserServiceImpl) SignUp(userDto *dto.UserDto) (*dto.UserDto, error) {
@@ -57,10 +58,31 @@ func (userServiceImpl *UserServiceImpl) SignIn(userDto *dto.UserDto) (*dto.UserD
 		return nil, errors.New("Create JWT error")
 	}
 
-	return &dto.UserDto{Token: authToken}, nil
+	tkSaveErr := auth.CreateAuth(userDto.Email, authToken, userServiceImpl.TokenRepository)
+	if tkSaveErr != nil {
+		return nil, errors.New("JWT Save Error")
+	}
+
+	return &dto.UserDto{AccessToken: authToken.AccessToken, RefreshToken: authToken.RefreshToken}, nil
 }
 
-func (userServiceImpl *UserServiceImpl) FindUserFromEmail(userDto *dto.UserDto) (*dto.UserDto, error) {
-	ret, err := userServiceImpl.InquireFromEmail(userDto.ToModel())
-	return &dto.UserDto{Name: ret.Name, Email: ret.Email}, err
+func (userServiceImpl *UserServiceImpl) InquireUserInfoFromToken(accessDetail *model.AccessDetail) (*dto.UserDto, error) {
+	userId, err := userServiceImpl.TokenRepository.Inqure(accessDetail)
+	if err != nil {
+		return nil, err
+	}
+
+	usr, err := userServiceImpl.UserRepository.InquireFromEmail(&model.User{Email: userId})
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.UserDto{Name: usr.Name, Email: usr.Email}, nil
+}
+func (userServiceImpl *UserServiceImpl) Logout(accessDetail *model.AccessDetail) error {
+	err := userServiceImpl.TokenRepository.Delete(accessDetail)
+	if err != nil {
+		return err
+	}
+	return nil
 }

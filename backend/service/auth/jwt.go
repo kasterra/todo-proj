@@ -8,23 +8,68 @@ import (
 	"strings"
 	"time"
 	"todo/config"
+	"todo/model"
+	"todo/repository"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/gofrs/uuid"
 )
 
-func CreateJWT(email string) (token string, err error) {
+func CreateJWT(email string) (tk *model.TokenDetails, err error) {
 	conf := config.GetConfig()
+
+	td := &model.TokenDetails{}
+	td.AtExpires = uint64(time.Now().Add(time.Minute * 15).Unix())
+
+	ran, err := uuid.NewV4()
+	if err != nil {
+		return nil, err
+	}
+	td.AccessUuid = ran.String()
+
+	td.RtExpires = uint64(time.Now().Add(time.Hour * 24 * 7).Unix())
+	ran, err = uuid.NewV4()
+	if err != nil {
+		return nil, err
+	}
+	td.RefreshUuid = ran.String()
+
+	// create Access Token
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
+	claims["AccessUuid"] = td.AccessUuid
 	claims["userId"] = email
-	claims["exp"] = time.Now().Add(time.Minute * 5).Unix()
-
+	claims["exp"] = td.AtExpires
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	token, err = t.SignedString([]byte(conf.JWTKey))
+	td.AccessToken, err = t.SignedString([]byte(conf.Secret.TokenAccess))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return token, nil
+
+	// create Refresh Token
+	claims = jwt.MapClaims{}
+	claims["RefreshUuid"] = td.RefreshUuid
+	claims["userId"] = email
+	claims["exp"] = td.RtExpires
+	t = jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	td.RefreshToken, err = t.SignedString([]byte(conf.Secret.TokenRefresh))
+	if err != nil {
+		return nil, err
+	}
+
+	return td, nil
+}
+
+func CreateAuth(userid string, td *model.TokenDetails, tokenRepository repository.TokenRepository) error {
+	errAccess := tokenRepository.Save(&model.TokenInfo{Uuid: td.AccessUuid, UserId: userid, ExpDate: td.AtExpires})
+	if errAccess != nil {
+		return errAccess
+	}
+	errRefresh := tokenRepository.Save(&model.TokenInfo{Uuid: td.RefreshUuid, UserId: userid, ExpDate: td.RtExpires})
+	if errRefresh != nil {
+		return errRefresh
+	}
+	return nil
 }
 
 func ExtractToken(r *http.Request) string {
@@ -44,7 +89,7 @@ func VerifyToken(r *http.Request) (*jwt.Token, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(conf.JWTKey), nil
+		return []byte(conf.Secret.TokenAccess), nil
 	})
 	if err != nil {
 		return nil, err
@@ -52,20 +97,25 @@ func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	return token, nil
 }
 
-func TokenValid(r *http.Request) (string, error) {
+func TokenValid(r *http.Request) (*model.AccessDetail, error) {
 	token, err := VerifyToken(r)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if ok && !token.Valid {
-		return "", errors.New("jwt claims")
+		return nil, errors.New("jwt claims to map claims")
+	}
+
+	accessUuid, ok2 := claims["AccessUuid"].(string)
+	if !ok2 {
+		return nil, errors.New("jwt claims access user id")
 	}
 
 	userId, ok2 := claims["userId"].(string)
 	if !ok2 {
-		return "", errors.New("jwt claims")
+		return nil, errors.New("jwt claims userId")
 	}
 
-	return userId, nil
+	return &model.AccessDetail{AccessUuid: accessUuid, UserId: userId}, nil
 }
