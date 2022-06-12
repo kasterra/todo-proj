@@ -76,6 +76,7 @@ mock.onGet('api/team/search').reply(config => {
 
 mock.onGet('api/team/info').reply(config => {
   const { teamId } = config.params;
+  console.log('api hit', teamId);
   if (teamId == 1) {
     return [
       200,
@@ -89,6 +90,7 @@ mock.onGet('api/team/info').reply(config => {
             email: 'lorem@ipsum.com',
             role: 'admin',
             status: 'active',
+            uid: 1,
           },
           {
             profile: 'https://picsum.photos/50',
@@ -96,11 +98,12 @@ mock.onGet('api/team/info').reply(config => {
             email: 'lorem@ipsum.net',
             role: 'member',
             status: 'inactive',
+            uid: 2,
           },
         ],
       },
     ];
-  } else {
+  } else if (teamId == 2) {
     return [
       200,
       {
@@ -124,7 +127,23 @@ mock.onGet('api/team/info').reply(config => {
         ],
       },
     ];
-  }
+  } else return [500];
 });
+
+mock.onGet('api/team/list').reply(() => [
+  200,
+  [
+    {
+      teamName: 'Team Lorem',
+      teamId: 1,
+      teamAvatarUrl: 'https://picsum.photos/200',
+    },
+    {
+      teamName: 'Team Ipsum',
+      teamId: 2,
+      teamAvatarUrl: 'https://picsum.photos/200',
+    },
+  ],
+]);
 
 export default mockAxios;

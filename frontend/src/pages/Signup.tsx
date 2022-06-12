@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import axios from 'mockAxios';
 import {
   FormBoxContainer,
   FormContainer,
@@ -18,6 +17,7 @@ import toast from 'react-hot-toast';
 import { authAtom } from 'atoms/authAtoms';
 import { useAtomValue } from 'jotai';
 import { useCallback, useEffect } from 'react';
+import { requestSignUp } from 'lib/fetchData';
 
 const Container = styled.div`
   display: flex;
@@ -48,18 +48,11 @@ const Signup = () => {
 
   const onSubmit = useCallback(async (data: IFormInputs) => {
     toast
-      .promise(
-        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/SignUp`, {
-          Name: data.name,
-          Email: data.email,
-          Password: data.password,
-        }),
-        {
-          loading: 'Loading',
-          success: 'Account Created Successfully',
-          error: err => err.response.data,
-        },
-      )
+      .promise(requestSignUp(data.name, data.email, data.password), {
+        loading: 'Loading',
+        success: 'Account Created Successfully',
+        error: err => err.response.data,
+      })
       .then(() => navigate('/login'));
   }, []);
 

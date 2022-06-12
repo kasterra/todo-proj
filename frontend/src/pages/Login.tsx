@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import axios from 'mockAxios';
 import {
   FormBoxContainer,
   FormContainer,
@@ -17,6 +16,7 @@ import toast from 'react-hot-toast';
 import { useAtom } from 'jotai';
 import { authAtom } from 'atoms/authAtoms';
 import { useCallback, useEffect } from 'react';
+import { requestLogin } from 'lib/fetchData';
 
 const Container = styled.div`
   display: flex;
@@ -34,17 +34,11 @@ const Login = () => {
 
   const onSubmit = useCallback(async (data: IFormInputs) => {
     toast
-      .promise(
-        axios.post(`${process.env.REACT_APP_API_BASE_URL}/user/SignIn`, {
-          Email: data.ID,
-          Password: data.Password,
-        }),
-        {
-          loading: 'Loading',
-          success: 'Login successful',
-          error: e => e.response.data,
-        },
-      )
+      .promise(requestLogin(data.ID, data.Password), {
+        loading: 'Loading',
+        success: 'Login successful',
+        error: e => e.response.data,
+      })
       .then(res => {
         setAuth(res.data.Token);
         navigate('/');
