@@ -5,8 +5,13 @@ import { theme as chakraTheme } from '@chakra-ui/react';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Routes from './pages/Routes';
-
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true,
+    },
+  },
+});
 
 const App = () => {
   return (

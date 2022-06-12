@@ -49,17 +49,79 @@ mock.onPut('api/team/changeName').reply(config => {
   return [200];
 });
 
-mock.onPost('api/user/search').reply(config => {
-  const data = JSON.parse(config.data);
-  if (data.email == 'wrong' || data.email == '') {
+mock.onGet('api/user/search').reply(config => {
+  const { email } = config.params;
+  if (email == 'wrong') {
     return [500];
   } else {
     return [
       200,
       {
         image: 'https://picsum.photos/id/238/50',
-        name: data.email,
+        name: email,
         email: 'lorem@example.com',
+      },
+    ];
+  }
+});
+
+mock.onGet('api/team/search').reply(config => {
+  const { teamName } = config.params;
+  if (teamName == 'wrong') {
+    return [500];
+  } else {
+    return [200];
+  }
+});
+
+mock.onGet('api/team/info').reply(config => {
+  const { teamId } = config.params;
+  if (teamId == 1) {
+    return [
+      200,
+      {
+        teamName: 'team Lorem',
+        yourRole: 'admin',
+        teamMateList: [
+          {
+            profile: 'https://picsum.photos/50',
+            name: 'lorem1',
+            email: 'lorem@ipsum.com',
+            role: 'admin',
+            status: 'active',
+          },
+          {
+            profile: 'https://picsum.photos/50',
+            name: 'lorem2',
+            email: 'lorem@ipsum.net',
+            role: 'member',
+            status: 'inactive',
+          },
+        ],
+      },
+    ];
+  } else {
+    return [
+      200,
+      {
+        teamName: 'team Ipsum',
+        yourRole: 'member',
+        teamMateList: [
+          {
+            profile: 'https://picsum.photos/50',
+            name: 'lorem1',
+            email: 'lorem@ipsum.com',
+            role: 'admin',
+            status: 'active',
+          },
+          {
+            profile: 'https://picsum.photos/50',
+            name: 'lorem2',
+            email: 'lorem@ipsum.net',
+            role: 'member',
+            status: 'inactive',
+          },
+        ],
       },
     ];
   }
