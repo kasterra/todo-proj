@@ -37,6 +37,44 @@
                 }
             }
         },
+        "/user/Refresh": {
+            "get": {
+                "description": "Refresh",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Token Refresh",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Authorization AccessToken",
+                        "name": "RefreshToken",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access token, Refresh token",
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserDto"
+                        }
+                    },
+                    "401": {
+                        "description": "when token was not vaild",
+                        "schema": {
+                            "$ref": "#/definitions/response.apiErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "JWT Create Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.apiErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/SignIn": {
             "post": {
                 "description": "Get JWT token",

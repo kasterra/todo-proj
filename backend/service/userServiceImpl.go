@@ -79,10 +79,25 @@ func (userServiceImpl *UserServiceImpl) InquireUserInfoFromToken(accessDetail *m
 
 	return &dto.UserDto{Name: usr.Name, Email: usr.Email}, nil
 }
+
 func (userServiceImpl *UserServiceImpl) Logout(accessDetail *model.AccessDetail) error {
 	err := userServiceImpl.TokenRepository.Delete(accessDetail)
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func (userServiceImpl *UserServiceImpl) NewToken(userDto *dto.UserDto) (*dto.UserDto, error) {
+	authToken, err := auth.CreateJWT(userDto.Email)
+	if err != nil {
+		return nil, errors.New("Create JWT error")
+	}
+
+	tkSaveErr := auth.CreateAuth(userDto.Email, authToken, userServiceImpl.TokenRepository)
+	if tkSaveErr != nil {
+		return nil, errors.New("JWT Save Error")
+	}
+
+	return &dto.UserDto{AccessToken: authToken.AccessToken, RefreshToken: authToken.RefreshToken}, nil
 }

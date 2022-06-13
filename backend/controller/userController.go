@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"todo/config"
 	"todo/controller/response"
 	"todo/model/dto"
 	"todo/service"
@@ -32,6 +33,9 @@ func (userController *UserController) InitRouter(e *echo.Group) {
 
 	// logout
 	e.GET("/Logout", userController.Logout)
+
+	// refresh
+	e.GET("/Refresh", userController.Refresh)
 }
 
 // @Summary Sign up
@@ -105,7 +109,7 @@ func (userController *UserController) SignIn(c echo.Context) error {
 // @Failure 401 {object} response.apiErrorResponse "when token was not vaild"
 // @Router /user/Token [get]
 func (userController *UserController) CheckToken(c echo.Context) error {
-	accessDetail, err := auth.TokenValid(c.Request())
+	accessDetail, err := auth.TokenValid(c.Request(), config.GetConfig().Secret.TokenAccess)
 	if err != nil {
 		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Token was not valid")
 	}
@@ -125,7 +129,7 @@ func (userController *UserController) CheckToken(c echo.Context) error {
 // @Failure 401 {object} response.apiErrorResponse "when token was not vaild"
 // @Router /user/Logout [get]
 func (userController *UserController) Logout(c echo.Context) error {
-	accessDetail, err := auth.TokenValid(c.Request())
+	accessDetail, err := auth.TokenValid(c.Request(), config.GetConfig().Secret.TokenAccess)
 	if err != nil {
 		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Token was not valid")
 	}
@@ -135,4 +139,32 @@ func (userController *UserController) Logout(c echo.Context) error {
 		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Wrong Token")
 	}
 	return response.ReturnApiSuccess(c, http.StatusNoContent, "")
+}
+
+// @Summary Token Refresh
+// @Description Refresh
+// @Produce json
+// @Param RefreshToken header string true "Authorization AccessToken"
+// @Success 200 {object} dto.UserDto "Access token, Refresh token"
+// @Failure 401 {object} response.apiErrorResponse "when token was not vaild"
+// @Failure 500 {object} response.apiErrorResponse "JWT Create Error"
+// @Router /user/Refresh [get]
+func (userController *UserController) Refresh(c echo.Context) error {
+	conf := config.GetConfig()
+	detail, err := auth.TokenValid(c.Request(), conf.Secret.TokenRefresh)
+	if err != nil {
+		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Token was not valid")
+	}
+
+	usr, err := userController.UserService.InquireUserInfoFromToken(detail)
+	if err != nil {
+		return response.ReturnApiFail(c, http.StatusUnauthorized, err, "Wrong Token")
+	}
+
+	usr, err = userController.UserService.NewToken(usr)
+	if err != nil {
+		return response.ReturnApiFail(c, http.StatusInternalServerError, err, "JWT Create Error")
+	}
+
+	return response.ReturnApiSuccess(c, http.StatusOK, usr)
 }

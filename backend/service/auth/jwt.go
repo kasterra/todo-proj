@@ -82,14 +82,13 @@ func ExtractToken(r *http.Request) string {
 	return ""
 }
 
-func VerifyToken(r *http.Request) (*jwt.Token, error) {
-	conf := config.GetConfig()
+func VerifyToken(r *http.Request, key string) (*jwt.Token, error) {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(conf.Secret.TokenAccess), nil
+		return []byte(key), nil
 	})
 	if err != nil {
 		return nil, err
@@ -97,8 +96,8 @@ func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	return token, nil
 }
 
-func TokenValid(r *http.Request) (*model.AccessDetail, error) {
-	token, err := VerifyToken(r)
+func TokenValid(r *http.Request, key string) (*model.AccessDetail, error) {
+	token, err := VerifyToken(r, key)
 	if err != nil {
 		return nil, err
 	}
@@ -107,15 +106,27 @@ func TokenValid(r *http.Request) (*model.AccessDetail, error) {
 		return nil, errors.New("jwt claims to map claims")
 	}
 
-	accessUuid, ok2 := claims["AccessUuid"].(string)
-	if !ok2 {
-		return nil, errors.New("jwt claims access user id")
-	}
+	if key == config.GetConfig().Secret.TokenAccess {
+		accessUuid, ok2 := claims["AccessUuid"].(string)
+		if !ok2 {
+			return nil, errors.New("jwt claims access user id")
+		}
 
-	userId, ok2 := claims["userId"].(string)
-	if !ok2 {
-		return nil, errors.New("jwt claims userId")
-	}
+		userId, ok2 := claims["userId"].(string)
+		if !ok2 {
+			return nil, errors.New("jwt claims userId")
+		}
+		return &model.AccessDetail{AccessUuid: accessUuid, UserId: userId}, nil
+	} else {
+		accessUuid, ok2 := claims["RefreshUuid"].(string)
+		if !ok2 {
+			return nil, errors.New("jwt claims access user id")
+		}
 
-	return &model.AccessDetail{AccessUuid: accessUuid, UserId: userId}, nil
+		userId, ok2 := claims["userId"].(string)
+		if !ok2 {
+			return nil, errors.New("jwt claims userId")
+		}
+		return &model.AccessDetail{AccessUuid: accessUuid, UserId: userId}, nil
+	}
 }

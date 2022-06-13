@@ -44,6 +44,31 @@ paths:
           schema:
             $ref: '#/definitions/response.apiErrorResponse'
       summary: Logout
+  /user/Refresh:
+    get:
+      description: Refresh
+      parameters:
+      - description: Authorization AccessToken
+        in: header
+        name: RefreshToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access token, Refresh token
+          schema:
+            $ref: '#/definitions/dto.UserDto'
+        "401":
+          description: when token was not vaild
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+        "500":
+          description: JWT Create Error
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+      summary: Token Refresh
   /user/SignIn:
     post:
       consumes:
