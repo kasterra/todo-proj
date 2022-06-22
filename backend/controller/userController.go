@@ -36,6 +36,7 @@ func (userController *UserController) InitRouter(e *echo.Group) {
 
 	// refresh
 	e.GET("/Refresh", userController.Refresh)
+
 }
 
 // @Summary Sign up
