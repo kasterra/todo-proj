@@ -1,5 +1,10 @@
 basePath: /
 definitions:
+  dto.TeamDto:
+    properties:
+      name:
+        type: string
+    type: object
   dto.UserDto:
     properties:
       accessToken:
@@ -25,6 +30,46 @@ info:
   title: Todo Swagger
   version: "1.0"
 paths:
+  /team/:
+    get:
+      description: Get team list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Names
+          schema:
+            items:
+              type: string
+            type: array
+        "500":
+          description: Fail Get Team
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+      summary: Inquire Team List
+    post:
+      consumes:
+      - application/json
+      description: Open new team
+      parameters:
+      - description: Team name
+        in: body
+        name: Name
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Name
+          schema:
+            $ref: '#/definitions/dto.TeamDto'
+        "500":
+          description: Fail Create New Team
+          schema:
+            $ref: '#/definitions/response.apiErrorResponse'
+      summary: Team Create
   /user/Logout:
     get:
       description: Logout

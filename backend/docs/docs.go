@@ -16,6 +16,67 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/team/": {
+            "get": {
+                "description": "Get team list",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Inquire Team List",
+                "responses": {
+                    "200": {
+                        "description": "Names",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Fail Get Team",
+                        "schema": {
+                            "$ref": "#/definitions/response.apiErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Open new team",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Team Create",
+                "parameters": [
+                    {
+                        "description": "Team name",
+                        "name": "Name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Name",
+                        "schema": {
+                            "$ref": "#/definitions/dto.TeamDto"
+                        }
+                    },
+                    "500": {
+                        "description": "Fail Create New Team",
+                        "schema": {
+                            "$ref": "#/definitions/response.apiErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/user/Logout": {
             "get": {
                 "description": "Logout",
@@ -230,6 +291,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dto.TeamDto": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.UserDto": {
             "type": "object",
             "properties": {
