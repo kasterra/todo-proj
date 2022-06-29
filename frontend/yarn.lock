@@ -7661,6 +7661,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hamt_plus@npm:1.0.2":
+  version: 1.0.2
+  resolution: "hamt_plus@npm:1.0.2"
+  checksum: af26ea32db03009019cc83dfa9411521a2fa16079443de1a502c9be46d8b3c975acda8ed93fc5750ef08d3186d35901e2d8cfe717dd54bea67b358601fa74e4c
+  languageName: node
+  linkType: hard
+
 "handle-thing@npm:^2.0.0":
   version: 2.0.1
   resolution: "handle-thing@npm:2.0.1"
@@ -9047,43 +9054,6 @@ __metadata:
   bin:
     jest: bin/jest.js
   checksum: 96f1d69042b3c6dfc695f2a4e4b0db38af6fb78582ad1a02beaa57cfcd77cbd31567d7d865c1c85709b7c3e176eefa3b2035ffecd646005f15d8ef528eccf205
-  languageName: node
-  linkType: hard
-
-"jotai@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "jotai@npm:1.7.0"
-  peerDependencies:
-    "@babel/core": "*"
-    "@babel/template": "*"
-    "@urql/core": "*"
-    immer: "*"
-    optics-ts: "*"
-    react: ">=16.8"
-    react-query: "*"
-    valtio: "*"
-    wonka: "*"
-    xstate: "*"
-  peerDependenciesMeta:
-    "@babel/core":
-      optional: true
-    "@babel/template":
-      optional: true
-    "@urql/core":
-      optional: true
-    immer:
-      optional: true
-    optics-ts:
-      optional: true
-    react-query:
-      optional: true
-    valtio:
-      optional: true
-    wonka:
-      optional: true
-    xstate:
-      optional: true
-  checksum: 463ac19ef81265b9a15095a10997467e00fe799460abd8fd11a03f62137ae0b0e94796ae3e5c7ca147ed260cbc6424000ed897a8b58d1cbb061115d241d73804
   languageName: node
   linkType: hard
 
@@ -11927,6 +11897,44 @@ __metadata:
   languageName: node
   linkType: hard
 
+"recoil-nexus@npm:^0.3.18":
+  version: 0.3.18
+  resolution: "recoil-nexus@npm:0.3.18"
+  peerDependencies:
+    "@types/react": ">=16.8.0"
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+    recoil: ">=0.2.0"
+    typescript: ">=4.1.0"
+  checksum: aedb501208f91e7db1c19accc25dc7c4277c8232860023fa2975760d7040a8b2a1088efaf44f18fa41d96183f36f8c9a7e39b0368d036b73d577b03fb860429b
+  languageName: node
+  linkType: hard
+
+"recoil-persist@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "recoil-persist@npm:4.2.0"
+  peerDependencies:
+    recoil: ^0.7.2
+  checksum: 1c8a6be4bb914b383429603e910aba80734311d8657ddf9f94a39513da0eb41fd6a2b74439f93658daf465d2e66a2d890e9f6b2f8a047e4fb99dc5b31f301515
+  languageName: node
+  linkType: hard
+
+"recoil@npm:^0.7.4":
+  version: 0.7.4
+  resolution: "recoil@npm:0.7.4"
+  dependencies:
+    hamt_plus: 1.0.2
+  peerDependencies:
+    react: ">=16.13.1"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 797b97ee74b2fbbb8e4dda8a951b13569d45a3440cfc05e870056255ff22c73aa816de70d66168a5b9ebe16c14d262777947dd752c8cb9559ef8ae3fbb586472
+  languageName: node
+  linkType: hard
+
 "recursive-readdir@npm:^2.2.2":
   version: 2.2.2
   resolution: "recursive-readdir@npm:2.2.2"
@@ -13304,7 +13312,6 @@ __metadata:
     eslint-plugin-react-hooks: next
     eslint-plugin-testing-library: ^5.5.1
     framer-motion: ^6.3.6
-    jotai: ^1.7.0
     prettier: ^2.6.2
     react: ^18.1.0
     react-beautiful-dnd: ^13.1.0
@@ -13316,6 +13323,9 @@ __metadata:
     react-router-dom: ^6.3.0
     react-scripts: 5.0.1
     react-spinners: ^0.12.0
+    recoil: ^0.7.4
+    recoil-nexus: ^0.3.18
+    recoil-persist: ^4.2.0
     typescript: ^4.7.2
     web-vitals: ^2.1.4
   languageName: unknown
