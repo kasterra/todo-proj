@@ -77,7 +77,7 @@ const Dashboard = () => {
     if (!auth) {
       navigate('/');
     }
-  }, [auth]);
+  }, [auth, navigate]);
   return (
     <>
       <Header />

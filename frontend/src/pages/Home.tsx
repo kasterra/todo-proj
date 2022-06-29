@@ -66,7 +66,7 @@ const Home = () => {
       navigate('/dashboard');
     }
     console.log(auth);
-  }, [auth]);
+  }, [auth, navigate]);
   return (
     <>
       <Header />

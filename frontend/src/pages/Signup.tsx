@@ -46,21 +46,24 @@ const Signup = () => {
     criteriaMode: 'all',
   });
 
-  const onSubmit = useCallback(async (data: IFormInputs) => {
-    toast
-      .promise(requestSignUp(data.name, data.email, data.password), {
-        loading: 'Loading',
-        success: 'Account Created Successfully',
-        error: err => err.response.data,
-      })
-      .then(() => navigate('/login'));
-  }, []);
+  const onSubmit = useCallback(
+    async (data: IFormInputs) => {
+      toast
+        .promise(requestSignUp(data.name, data.email, data.password), {
+          loading: 'Loading',
+          success: 'Account Created Successfully',
+          error: err => err.response.data,
+        })
+        .then(() => navigate('/login'));
+    },
+    [navigate],
+  );
 
   useEffect(() => {
     if (auth) {
       navigate('/dashboard');
     }
-  }, []);
+  }, [auth, navigate]);
 
   return (
     <Container>

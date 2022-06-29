@@ -32,18 +32,21 @@ const Login = () => {
   const navigate = useNavigate();
   const [auth, setAuth] = useAtom(authAtom);
 
-  const onSubmit = useCallback(async (data: IFormInputs) => {
-    toast
-      .promise(requestLogin(data.ID, data.Password), {
-        loading: 'Loading',
-        success: 'Login successful',
-        error: e => e.response.data,
-      })
-      .then(res => {
-        setAuth(res.data.Token);
-        navigate('/');
-      });
-  }, []);
+  const onSubmit = useCallback(
+    async (data: IFormInputs) => {
+      toast
+        .promise(requestLogin(data.ID, data.Password), {
+          loading: 'Loading',
+          success: 'Login successful',
+          error: e => e.response.data,
+        })
+        .then(res => {
+          setAuth(res.data.AccessToken);
+          navigate('/');
+        });
+    },
+    [navigate, setAuth],
+  );
 
   const {
     register,
@@ -55,7 +58,7 @@ const Login = () => {
     if (auth) {
       navigate('/dashboard');
     }
-  }, [auth]);
+  }, [auth, navigate]);
 
   return (
     <Container>

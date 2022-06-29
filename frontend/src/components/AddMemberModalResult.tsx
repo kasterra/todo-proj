@@ -54,7 +54,7 @@ const AddMemberModalResult = ({
   useEffect(() => {
     setIsSuccess(isSuccess);
     setData(data as object);
-  }, [isSuccess, data]);
+  }, [isSuccess, data, setIsSuccess, setData]);
   return email ? (
     <Container>
       <img src={data?.data.image} alt="profile" />

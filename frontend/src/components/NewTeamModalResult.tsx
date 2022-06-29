@@ -51,7 +51,7 @@ const NewTeamModalResult = ({
   );
   useEffect(() => {
     setIsSuccess(isSuccess);
-  }, [isSuccess]);
+  }, [isSuccess, setIsSuccess]);
   return teamName ? (
     <Container>
       <img src="/icons/modal-check.svg" alt="check" />
