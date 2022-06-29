@@ -9,7 +9,6 @@ import Login from './Login';
 import UserDashBoard from './UserDashBoard';
 import Signup from './Signup';
 import TeamDashboard from './TeamDashboard';
-import Todos from './Todos';
 
 const Routes = () => {
   return (
@@ -23,7 +22,6 @@ const Routes = () => {
           <Route path="team/:teamId" element={<TeamDashboard />} />
           <Route path="user/:userId" element={<UserDashBoard />} />
         </Route>
-        <Route path="/todo" element={<Todos />} />
       </ReactRouterRoutes>
     </Router>
   );

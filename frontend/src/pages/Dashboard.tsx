@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useAtomValue } from 'jotai';
+import { useRecoilValue } from 'recoil';
 import { Suspense, useEffect } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
@@ -9,6 +9,7 @@ import Header from 'components/Header';
 import { theme as chakraTheme } from '@chakra-ui/react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { css } from '@emotion/react';
+import { refreshToken } from 'lib/fetchData';
 
 const Menus = styled.div`
   display: flex;
@@ -70,11 +71,13 @@ const MessageHolder = styled.div`
   }
 `;
 
+refreshToken('111');
+
 const Dashboard = () => {
   const navigate = useNavigate();
-  const auth = useAtomValue(authAtom);
+  const auth = useRecoilValue(authAtom);
   useEffect(() => {
-    if (!auth) {
+    if (!auth.AccessToken) {
       navigate('/');
     }
   }, [auth, navigate]);

@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
-import { useSetAtom } from 'jotai';
-import { Droppable } from 'react-beautiful-dnd';
+// import { useSetRecoilState } from 'recoil';
+// import { Droppable } from 'react-beautiful-dnd';
 import { useForm } from 'react-hook-form';
-import { IToDo, toDoState } from 'atoms/todoAtoms';
-import DraggableCard from './DraggableCard';
+// import DraggableCard from './DraggableCard';
 
 const Wrapper = styled.div`
   width: 300px;
@@ -15,22 +14,22 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-interface IAreaProps {
-  isDraggingOver: boolean;
-  isDraggingFromThisWith: boolean;
-}
+// interface IAreaProps {
+//   isDraggingOver: boolean;
+//   isDraggingFromThisWith: boolean;
+// }
 
-const Area = styled.div<IAreaProps>`
-  background-color: ${props =>
-    props.isDraggingOver
-      ? '#b2b3c3'
-      : props.isDraggingFromThisWith
-      ? '#dfe6e9'
-      : 'transparent'};
-  flex-grow: 1;
-  transition: background-color 0.3s ease-in-out;
-  padding: 20px;
-`;
+// const Area = styled.div<IAreaProps>`
+//   background-color: ${props =>
+//     props.isDraggingOver
+//       ? '#b2b3c3'
+//       : props.isDraggingFromThisWith
+//       ? '#dfe6e9'
+//       : 'transparent'};
+//   flex-grow: 1;
+//   transition: background-color 0.3s ease-in-out;
+//   padding: 20px;
+// `;
 
 const Title = styled.h2`
   text-align: center;
@@ -46,39 +45,35 @@ const Form = styled.form`
   }
 `;
 
-interface IBoardProps {
-  toDos: IToDo[];
-  boardId: string;
-}
+// interface IBoardProps {
+//   toDos: IToDo[];
+//   boardId: string;
+// }
 
 interface IForm {
   toDo: string;
 }
 
-const Board = ({ toDos, boardId }: IBoardProps) => {
-  const setToDos = useSetAtom(toDoState);
-  const { register, setValue, handleSubmit } = useForm<IForm>();
-  const onValid = ({ toDo }: IForm) => {
-    const newToDo = {
-      id: Date.now(),
-      text: toDo,
-    };
-    setToDos(allBoards => {
-      return { ...allBoards, [boardId]: [...allBoards[boardId], newToDo] };
-    });
-    setValue('toDo', '');
-  };
+const Board = () => {
+  // const setToDos = useSetRecoilState(toDoState);
+  const { register } = useForm<IForm>();
+  // const onValid = ({ toDo }: IForm) => {
+  //   const newToDo = {
+  //     id: Date.now(),
+  //     text: toDo,
+  //   };
+  //   setToDos(allBoards => {
+  //     return { ...allBoards, [boardId]: [...allBoards[boardId], newToDo] };
+  //   });
+  //   setValue('toDo', '');
+  // };
   return (
     <Wrapper>
-      <Title>{boardId}</Title>
-      <Form onSubmit={handleSubmit(onValid)}>
-        <input
-          {...register('toDo', { required: true })}
-          type="text"
-          placeholder={`Add Task on ${boardId}`}
-        ></input>
+      <Title>boardId</Title>
+      <Form>
+        <input {...register('toDo', { required: true })} type="text"></input>
       </Form>
-      <Droppable droppableId={boardId}>
+      {/* <Droppable droppableId={boardId}>
         {(provided, snapshot) => (
           <Area
             isDraggingOver={snapshot.isDraggingOver}
@@ -97,7 +92,7 @@ const Board = ({ toDos, boardId }: IBoardProps) => {
             {provided.placeholder}
           </Area>
         )}
-      </Droppable>
+      </Droppable> */}
     </Wrapper>
   );
 };
