@@ -1,17 +1,18 @@
-import { atom } from 'jotai';
+import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+
+const { persistAtom } = recoilPersist();
 
 export interface IAuth {
-  token: string;
+  AccessToken: string;
+  RefreshToken: string;
 }
 
-const internalAuthAtom = atom(
-  (localStorage.getItem('authAtom') as string) ?? '',
-);
-
-export const authAtom = atom(
-  get => get(internalAuthAtom),
-  (_, set, newToken: string) => {
-    set(internalAuthAtom, newToken);
-    localStorage.setItem('authAtom', newToken);
+export const authAtom = atom<IAuth>({
+  key: 'authAtom',
+  default: {
+    AccessToken: '',
+    RefreshToken: '',
   },
-);
+  effects_UNSTABLE: [persistAtom],
+});

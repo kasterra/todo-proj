@@ -13,7 +13,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { useAtom } from 'jotai';
+import { useRecoilState } from 'recoil';
 import { authAtom } from 'atoms/authAtoms';
 import { useCallback, useEffect } from 'react';
 import { requestLogin } from 'lib/fetchData';
@@ -30,7 +30,7 @@ interface IFormInputs {
 }
 const Login = () => {
   const navigate = useNavigate();
-  const [auth, setAuth] = useAtom(authAtom);
+  const [auth, setAuth] = useRecoilState(authAtom);
 
   const onSubmit = useCallback(
     async (data: IFormInputs) => {
@@ -41,7 +41,10 @@ const Login = () => {
           error: e => e.response.data,
         })
         .then(res => {
-          setAuth(res.data.AccessToken);
+          setAuth({
+            AccessToken: res.data.AccessToken,
+            RefreshToken: res.data.RefreshToken,
+          });
           navigate('/');
         });
     },
@@ -55,7 +58,7 @@ const Login = () => {
   } = useForm<IFormInputs>();
 
   useEffect(() => {
-    if (auth) {
+    if (auth.AccessToken) {
       navigate('/dashboard');
     }
   }, [auth, navigate]);

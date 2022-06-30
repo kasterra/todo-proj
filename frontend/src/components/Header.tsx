@@ -2,7 +2,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { authAtom } from 'atoms/authAtoms';
-import { useAtomValue, useSetAtom } from 'jotai';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'react-router-dom';
 import { theme } from '@chakra-ui/react';
 import toast from 'react-hot-toast';
@@ -36,7 +36,7 @@ const Button = styled.button`
   }
 `;
 const SignOutBtn = () => {
-  const setToken = useSetAtom(authAtom);
+  const setToken = useSetRecoilState(authAtom);
   return (
     <Button
       css={css`
@@ -45,7 +45,7 @@ const SignOutBtn = () => {
       `}
       onClick={() => {
         toast.success('logout successful');
-        setToken('');
+        setToken({ AccessToken: '', RefreshToken: '' });
       }}
     >
       <img src="/icons/log-out-03.svg" alt="signup" />
@@ -84,13 +84,15 @@ const NotLoggedInBtns = () => {
 };
 
 const Header = () => {
-  const token = useAtomValue(authAtom);
+  const token = useRecoilValue(authAtom);
   return (
     <Container>
       <Link to="/">
         <img src="/logo/top%20logo.svg" alt="logo" />
       </Link>
-      <Buttons>{token === '' ? <NotLoggedInBtns /> : <SignOutBtn />}</Buttons>
+      <Buttons>
+        {token.AccessToken === '' ? <NotLoggedInBtns /> : <SignOutBtn />}
+      </Buttons>
     </Container>
   );
 };

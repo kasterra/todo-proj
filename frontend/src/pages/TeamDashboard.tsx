@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { theme as chakraTheme } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { useQuery, useQueryErrorResetBoundary } from 'react-query';
+import { useQueryErrorResetBoundary } from 'react-query';
 import BarLoader from 'react-spinners/BarLoader';
 import Modal from 'components/Modal';
 import AddMemberModalContent from 'components/AddMemberModalContent';
@@ -12,9 +12,9 @@ import NewTeamModalContent from 'components/NewTeamModalContent';
 import TeamDashboardMainContent from 'components/TeamDashboardMainContent';
 import { ErrorBoundary } from 'react-error-boundary';
 import { getTeamList, queryKeys } from 'lib/fetchData';
-import { DragDropContext } from 'react-beautiful-dnd';
-import { useAtomValue } from 'jotai';
+import { useRecoilValue } from 'recoil';
 import { authAtom } from 'atoms/authAtoms';
+import { useQueryWithAuth } from 'hooks/useQueryWithAuth';
 
 const Container = styled.div`
   margin: 0px 48px;
@@ -71,8 +71,12 @@ const TeamDashboard = () => {
   const [isShowingNewTeamModal, setIsShowingNewTeamModal] = useState(false);
   const [isShowingNewMemberModal, setIsShowingNewMemberModal] = useState(false);
   const { reset } = useQueryErrorResetBoundary();
-  const token = useAtomValue(authAtom);
-  const { data } = useQuery(queryKeys.teamList, () => getTeamList(token));
+  const token = useRecoilValue(authAtom);
+  const { data } = useQueryWithAuth(
+    queryKeys.teamList,
+    getTeamList,
+    token.AccessToken,
+  );
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,41 +99,65 @@ const TeamDashboard = () => {
         </Modal>
       )}
       <Container>
-        <DragDropContext onDragEnd={() => {}}>
-          <SideNav>
-            <NewBtnSection>
+        <SideNav>
+          <NewBtnSection>
+            <NavBtn
+              css={css`
+                size: 12px;
+              `}
+              onClick={() => setIsShowingNewTeamModal(true)}
+            >
+              <img src="/icons/users-plus.svg" alt="users-plus" />
+              <span>
+                Create
+                <br /> New Team
+              </span>
+            </NavBtn>
+          </NewBtnSection>
+          {data?.data.map(item => {
+            return (
               <NavBtn
-                css={css`
-                  size: 12px;
-                `}
-                onClick={() => setIsShowingNewTeamModal(true)}
+                key={item.teamId}
+                onClick={() => {
+                  navigate(`/dashboard/team/${item.teamId}`);
+                  resetBtnRef.current?.click();
+                }}
               >
-                <img src="/icons/users-plus.svg" alt="users-plus" />
-                <span>
-                  Create
-                  <br /> New Team
-                </span>
+                <img src={item.teamAvatarUrl} alt="teamAvatar" />
+                {item.teamName}
               </NavBtn>
-            </NewBtnSection>
-            {data?.data.map(item => {
-              return (
-                <NavBtn
-                  key={item.teamId}
-                  onClick={() => {
-                    navigate(`/dashboard/team/${item.teamId}`);
-                    resetBtnRef.current?.click();
-                  }}
-                >
-                  <img src={item.teamAvatarUrl} alt="teamAvatar" />
-                  {item.teamName}
-                </NavBtn>
-              );
-            })}
-          </SideNav>
-          {teamId && (
-            <ErrorBoundary
-              onReset={reset}
-              fallbackRender={({ resetErrorBoundary }) => (
+            );
+          })}
+        </SideNav>
+        {teamId && (
+          <ErrorBoundary
+            onReset={reset}
+            fallbackRender={({ resetErrorBoundary }) => (
+              <div
+                css={css`
+                  width: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+                  justify-content: center;
+                  align-items: center;
+                  img {
+                    width: 200px;
+                    height: 200px;
+                  }
+                `}
+              >
+                <img src="/icons/alert-y.svg" alt="alert" />
+                <h2>Team Not Found. Please check your URL and try again.</h2>
+                <button
+                  ref={resetBtnRef}
+                  onClick={() => resetErrorBoundary()}
+                ></button>
+              </div>
+            )}
+          >
+            <Suspense
+              fallback={
                 <div
                   css={css`
                     width: 100%;
@@ -138,49 +166,20 @@ const TeamDashboard = () => {
                     gap: 10px;
                     justify-content: center;
                     align-items: center;
-                    img {
-                      width: 200px;
-                      height: 200px;
-                    }
                   `}
                 >
-                  <img src="/icons/alert-y.svg" alt="alert" />
-                  <h2>Team Not Found. Please check your URL and try again.</h2>
-                  <button
-                    ref={resetBtnRef}
-                    onClick={() => resetErrorBoundary()}
-                  ></button>
+                  <BarLoader width={100} color={chakraTheme.colors.blue[500]} />
+                  <h2>Loading Team Info...</h2>
                 </div>
-              )}
+              }
             >
-              <Suspense
-                fallback={
-                  <div
-                    css={css`
-                      width: 100%;
-                      display: flex;
-                      flex-direction: column;
-                      gap: 10px;
-                      justify-content: center;
-                      align-items: center;
-                    `}
-                  >
-                    <BarLoader
-                      width={100}
-                      color={chakraTheme.colors.blue[500]}
-                    />
-                    <h2>Loading Team Info...</h2>
-                  </div>
-                }
-              >
-                <TeamDashboardMainContent
-                  teamId={teamId}
-                  setIsShowingNewMemberModal={setIsShowingNewMemberModal}
-                />
-              </Suspense>
-            </ErrorBoundary>
-          )}
-        </DragDropContext>
+              <TeamDashboardMainContent
+                teamId={teamId}
+                setIsShowingNewMemberModal={setIsShowingNewMemberModal}
+              />
+            </Suspense>
+          </ErrorBoundary>
+        )}
       </Container>
     </>
   );

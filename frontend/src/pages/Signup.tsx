@@ -15,7 +15,7 @@ import {
 } from 'components/FormComponents';
 import toast from 'react-hot-toast';
 import { authAtom } from 'atoms/authAtoms';
-import { useAtomValue } from 'jotai';
+import { useRecoilValue } from 'recoil';
 import { useCallback, useEffect } from 'react';
 import { requestSignUp } from 'lib/fetchData';
 
@@ -35,7 +35,7 @@ interface IFormInputs {
 
 const Signup = () => {
   const navigate = useNavigate();
-  const auth = useAtomValue(authAtom);
+  const auth = useRecoilValue(authAtom);
 
   const {
     register,
@@ -60,7 +60,7 @@ const Signup = () => {
   );
 
   useEffect(() => {
-    if (auth) {
+    if (auth.AccessToken) {
       navigate('/dashboard');
     }
   }, [auth, navigate]);

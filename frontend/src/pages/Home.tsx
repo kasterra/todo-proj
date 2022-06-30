@@ -5,7 +5,7 @@ import { theme as chakraTheme } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAtomValue } from 'jotai';
+import { useRecoilValue } from 'recoil';
 import { authAtom } from 'atoms/authAtoms';
 
 const Container = styled.div`
@@ -60,9 +60,9 @@ const RoleText = styled.h4`
 
 const Home = () => {
   const navigate = useNavigate();
-  const auth = useAtomValue(authAtom);
+  const auth = useRecoilValue(authAtom);
   useEffect(() => {
-    if (auth) {
+    if (auth.AccessToken) {
       navigate('/dashboard');
     }
     console.log(auth);
