@@ -6,6 +6,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Link } from 'react-router-dom';
 import { theme } from '@chakra-ui/react';
 import toast from 'react-hot-toast';
+import { queryClient } from '../App';
 
 const Container = styled.div`
   background-color: #fff;
@@ -44,6 +45,7 @@ const SignOutBtn = () => {
         color: white;
       `}
       onClick={() => {
+        queryClient.clear();
         toast.success('logout successful');
         setToken({ AccessToken: '', RefreshToken: '' });
       }}

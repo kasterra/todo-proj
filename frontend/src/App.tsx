@@ -8,10 +8,12 @@ import Routes from './pages/Routes';
 import { RecoilRoot } from 'recoil';
 import RecoilNexus from 'recoil-nexus';
 import { ReactQueryDevtools } from 'react-query/devtools';
-const queryClient = new QueryClient({
+
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       suspense: true,
+      retry: 3,
     },
   },
 });
