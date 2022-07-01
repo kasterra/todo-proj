@@ -2,11 +2,11 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { theme as chakraTheme } from '@chakra-ui/react';
-import { useRef, useState, useCallback, FormEvent, useEffect } from 'react';
+import { useRef, useState, useCallback, FormEvent } from 'react';
 import toast from 'react-hot-toast';
-import { useQuery } from 'react-query';
 import Table from './Table';
 import { getTeamInfoByTeamId, queryKeys, updateTeamName } from 'lib/fetchData';
+import { useQuery } from 'react-query';
 
 const MainContent = styled.div`
   width: 100%;
@@ -206,19 +206,24 @@ const TeamDashboardMainContent = ({
   const [isNameEditing, setIsNameEditing] = useState(false);
   const [isChangeNameLoading, setIsChangeNameLoading] = useState(false);
   const [teamName, setTeamName] = useState('');
-  const onSubmit = useCallback(async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // TODO:server fetching logic
-    setIsChangeNameLoading(true);
-    toast
-      .promise(updateTeamName(teamId, teamNameRef.current!.value), {
-        loading: 'Loading',
-        success: 'Team name change successfull',
-        error: e => e.response.data,
-      })
-      .then(() => setIsNameEditing(false))
-      .finally(() => setIsChangeNameLoading(false));
-  }, []);
+  const { data } = useQuery(queryKeys.teamInfoByTeamId(teamId), () =>
+    getTeamInfoByTeamId(teamId),
+  );
+  const onSubmit = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setIsChangeNameLoading(true);
+      toast
+        .promise(updateTeamName(teamId, teamNameRef.current!.value), {
+          loading: 'Loading',
+          success: 'Team name change successfull',
+          error: e => e.response.data,
+        })
+        .then(() => setIsNameEditing(false))
+        .finally(() => setIsChangeNameLoading(false));
+    },
+    [teamId],
+  );
 
   const onLeaveClick = useCallback(() => {
     toast(t => (
@@ -278,13 +283,6 @@ const TeamDashboardMainContent = ({
     [],
   );
 
-  const { data } = useQuery(queryKeys.teamInfoByTeamId(teamId), () =>
-    getTeamInfoByTeamId(teamId),
-  );
-
-  useEffect(() => {
-    setTeamName(data!.data.teamName);
-  }, [data?.data.teamName]);
   return (
     <MainContent>
       <TeamDashBoardHeader
@@ -390,8 +388,8 @@ const TeamDashboardMainContent = ({
           height: '40px',
         }}
         contentTable={{
-          content: data!.data.teamMateList.map(item => [
-            <TableNameCard>
+          content: data?.data?.teamMateList?.map(item => [
+            <TableNameCard key={item.uid}>
               <img src={item.profile} alt="profile img" />
               <div className="info">
                 <span className="name">{item.name}</span>

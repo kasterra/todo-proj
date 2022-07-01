@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { theme as chakraTheme } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import { Suspense, useEffect, useRef, useState } from 'react';
-import { useQueryErrorResetBoundary } from 'react-query';
+import { useQuery, useQueryErrorResetBoundary } from 'react-query';
 import BarLoader from 'react-spinners/BarLoader';
 import Modal from 'components/Modal';
 import AddMemberModalContent from 'components/AddMemberModalContent';
@@ -12,9 +12,6 @@ import NewTeamModalContent from 'components/NewTeamModalContent';
 import TeamDashboardMainContent from 'components/TeamDashboardMainContent';
 import { ErrorBoundary } from 'react-error-boundary';
 import { getTeamList, queryKeys } from 'lib/fetchData';
-import { useRecoilValue } from 'recoil';
-import { authAtom } from 'atoms/authAtoms';
-import { useQueryWithAuth } from 'hooks/useQueryWithAuth';
 
 const Container = styled.div`
   margin: 0px 48px;
@@ -71,12 +68,7 @@ const TeamDashboard = () => {
   const [isShowingNewTeamModal, setIsShowingNewTeamModal] = useState(false);
   const [isShowingNewMemberModal, setIsShowingNewMemberModal] = useState(false);
   const { reset } = useQueryErrorResetBoundary();
-  const token = useRecoilValue(authAtom);
-  const { data } = useQueryWithAuth(
-    queryKeys.teamList,
-    getTeamList,
-    token.AccessToken,
-  );
+  const { data } = useQuery(queryKeys.teamList, () => getTeamList());
   const navigate = useNavigate();
 
   useEffect(() => {

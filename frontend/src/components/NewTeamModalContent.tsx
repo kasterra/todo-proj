@@ -4,8 +4,8 @@ import { theme as chakraTheme } from '@chakra-ui/react';
 import { css } from '@emotion/react';
 import RingLoader from 'react-spinners/RingLoader';
 import { Suspense, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import NewTeamModalResult from './NewTeamModalResult';
+import { postNewTeam } from 'lib/fetchData';
 
 const Header = styled.div`
   display: flex;
@@ -74,37 +74,6 @@ const BottomButton = styled.button`
   }
 `;
 
-const ResultCard = styled.div`
-  box-shadow: ${chakraTheme.shadows.md};
-  background: #f7fafc;
-  border-radius: 10px;
-  display: flex;
-  gap: 16px;
-  margin-top: 20px;
-  padding: 24px 38px;
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-  }
-  .info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    color: #000;
-    .title {
-      font-weight: 700;
-      font-size: 20px;
-      line-height: 28px;
-    }
-    .detail {
-      font-weight: 500;
-      font-size: 14px;
-      line-height: 20px;
-    }
-  }
-`;
-
 interface INewTeamModalContentProps {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -124,29 +93,23 @@ const NewTeamModalContent = ({ setVisible }: INewTeamModalContentProps) => {
         <input
           type="text"
           value={teamName}
-          onChange={e => setTeamName(e.target.value)}
+          onChange={e => {
+            setTeamName(e.target.value);
+          }}
           placeholder="New Team Name"
         />
       </Form>
-      <ErrorBoundary
-        fallbackRender={({ resetErrorBoundary }) => (
-          <ResultCard>
-            <img src="/icons/modal-x.svg" alt="x" />
-            <div className="info">
-              <span className="title">Already In Use</span>
-              <span className="detail">please use another name</span>
-            </div>
-          </ResultCard>
-        )}
+
+      <Suspense
+        fallback={<RingLoader size={80} color={chakraTheme.colors.blue[500]} />}
       >
-        <Suspense
-          fallback={
-            <RingLoader size={80} color={chakraTheme.colors.blue[500]} />
-          }
-        >
-          <NewTeamModalResult teamName={teamName} setIsSuccess={setIsSuccess} />
-        </Suspense>
-      </ErrorBoundary>
+        <NewTeamModalResult
+          teamName={teamName}
+          isSuccess={isSuccess}
+          setIsSuccess={setIsSuccess}
+        />
+      </Suspense>
+
       <BottomButtons>
         <BottomButton
           onClick={() => setVisible(false)}
@@ -161,6 +124,7 @@ const NewTeamModalContent = ({ setVisible }: INewTeamModalContentProps) => {
           className="continue"
           disabled={!isSuccess}
           onClick={() => {
+            postNewTeam(teamName);
             setVisible(false);
           }}
         >

@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { theme as chakraTheme } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { useQuery } from 'react-query';
 import { getTeamInfoByTeamName, queryKeys } from 'lib/fetchData';
+import { useQuery } from 'react-query';
 
 const Container = styled.div`
   box-shadow: ${chakraTheme.shadows.md};
@@ -37,29 +37,39 @@ const Container = styled.div`
 
 interface INewTeamModalResultProps {
   teamName: string;
+  isSuccess: boolean;
   setIsSuccess: Dispatch<SetStateAction<boolean>>;
 }
 
 const NewTeamModalResult = ({
   teamName,
+  isSuccess,
   setIsSuccess,
 }: INewTeamModalResultProps) => {
-  const { isSuccess } = useQuery(
-    queryKeys.teamInfoByTeamName(teamName),
-    () => getTeamInfoByTeamName(teamName),
-    { retry: false, enabled: !!teamName },
+  const { data } = useQuery(queryKeys.teamInfoByTeamName(teamName), () =>
+    getTeamInfoByTeamName(teamName),
   );
   useEffect(() => {
-    setIsSuccess(isSuccess);
-  }, [isSuccess, setIsSuccess]);
+    if (data) setIsSuccess(Object.keys(data.data).length === 0);
+  }, [setIsSuccess, data]);
   return teamName ? (
-    <Container>
-      <img src="/icons/modal-check.svg" alt="check" />
-      <div className="info">
-        <span className="title">Awesome Name</span>
-        <span className="detail">Good To go!</span>
-      </div>
-    </Container>
+    isSuccess ? (
+      <Container>
+        <img src="/icons/modal-check.svg" alt="check" />
+        <div className="info">
+          <span className="title">Awesome Name</span>
+          <span className="detail">Good To go!</span>
+        </div>
+      </Container>
+    ) : (
+      <Container>
+        <img src="/icons/modal-x.svg" alt="x" />
+        <div className="info">
+          <span className="title">Already In Use</span>
+          <span className="detail">please use another name</span>
+        </div>
+      </Container>
+    )
   ) : null;
 };
 
