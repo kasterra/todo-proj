@@ -4,7 +4,30 @@ import MockAdapter from 'axios-mock-adapter';
 const mockAxios = axios.create();
 const mock = new MockAdapter(mockAxios, { delayResponse: 1500 });
 
+let tokenHasFail = true;
+let tokenHasChecked = false;
+const isEmptyArray = false;
+/**
+ * check param
+ * @param {string} token token for checking
+ * @return {boolean} result of token validation
+ */
+function checkTokenHasFail(token: string) {
+  if (
+    (token === 'sometimesFail' && tokenHasFail) ||
+    (!tokenHasChecked && token === 'sometimesFail')
+  ) {
+    console.log('Token expiration simulated');
+    tokenHasFail = true;
+    return true; // 토큰이 만료가 되는 상황을 가정함
+  }
+  tokenHasChecked = true;
+  console.log('Token is okay');
+  return false;
+}
+
 mock.onPost('/api/user/SignUp').reply(config => {
+  console.log('hit api/user/signUp');
   const data = JSON.parse(config.data);
   const errors: string[] = [];
 
@@ -20,6 +43,7 @@ mock.onPost('/api/user/SignUp').reply(config => {
 });
 
 mock.onPost('api/user/SignIn').reply(config => {
+  console.log('hit api/user/signIn');
   const data = JSON.parse(config.data);
   const errors: string[] = [];
 
@@ -32,16 +56,41 @@ mock.onPost('api/user/SignIn').reply(config => {
     return [400, errors];
   }
 
-  return [200, { Token: 'aaaaaa' }];
+  return [200, { AccessToken: 'sometimesFail', RefreshToken: 'refreshToken' }];
+});
+
+mock.onGet('api/user/Refresh').reply(config => {
+  console.log('hit api/user/Refresh');
+  tokenHasFail = false;
+  const { RefreshToken } = config.params;
+  console.log('refreshToekn', RefreshToken);
+  if (RefreshToken == 'refreshToken')
+    return [
+      200,
+      { AccessToken: 'alreadyRefreshed', RefreshToken: 'refreshToken' },
+    ];
+  else {
+    console.log('401 in api/Refresh');
+    return [401];
+  }
 });
 
 mock.onGet('api/user/Token').reply(config => {
-  const auth = config.headers!.Authorization;
+  console.log('hit api/user/Token');
+  const auth = config.headers!.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
   console.log('auth', auth);
   return [200, { Name: 'lorem', Email: 'lorem@example.com' }];
 });
 
 mock.onPut('api/team/changeName').reply(config => {
+  console.log('hit api/team/changeName');
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
   const body = JSON.parse(config.data);
   if (body.newName == 'wrong') {
     return [500, ['the team name is already in use']];
@@ -50,6 +99,11 @@ mock.onPut('api/team/changeName').reply(config => {
 });
 
 mock.onGet('api/user/search').reply(config => {
+  console.log('hit api/user/search');
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
   const { email } = config.params;
   if (email == 'wrong') {
     return [500];
@@ -66,6 +120,11 @@ mock.onGet('api/user/search').reply(config => {
 });
 
 mock.onGet('api/team/search').reply(config => {
+  console.log('hit api/team/search');
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
   const { teamName } = config.params;
   if (teamName == 'wrong') {
     return [500];
@@ -74,10 +133,41 @@ mock.onGet('api/team/search').reply(config => {
   }
 });
 
-mock.onGet('api/team/info').reply(config => {
-  const { teamId } = config.params;
+mock.onGet('api/team/').reply(config => {
+  console.log('hit GET api/team');
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
+  if (isEmptyArray) return [200, []];
+  return [
+    200,
+    [
+      {
+        teamName: 'Team Lorem',
+        teamId: 1,
+        teamAvatarUrl: 'https://picsum.photos/200',
+      },
+      {
+        teamName: 'Team Ipsum',
+        teamId: 2,
+        teamAvatarUrl: 'https://picsum.photos/200',
+      },
+    ],
+  ];
+});
+
+mock.onGet(new RegExp('api/team/.+')).reply(config => {
+  console.log('hit api/team/.+');
+  const teamId = config.url!.split('/')[3];
+  console.log('teamId: ' + teamId);
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
   console.log('api hit', teamId);
-  if (teamId == 1) {
+  if (teamId == '1') {
+    console.log('teamId1 200');
     return [
       200,
       {
@@ -103,7 +193,8 @@ mock.onGet('api/team/info').reply(config => {
         ],
       },
     ];
-  } else if (teamId == 2) {
+  } else if (teamId == '2') {
+    console.log('teamId2 200');
     return [
       200,
       {
@@ -127,23 +218,10 @@ mock.onGet('api/team/info').reply(config => {
         ],
       },
     ];
-  } else return [500];
+  } else {
+    console.log(500);
+    return [200, {}];
+  }
 });
-
-mock.onGet('api/team/list').reply(() => [
-  200,
-  [
-    {
-      teamName: 'Team Lorem',
-      teamId: 1,
-      teamAvatarUrl: 'https://picsum.photos/200',
-    },
-    {
-      teamName: 'Team Ipsum',
-      teamId: 2,
-      teamAvatarUrl: 'https://picsum.photos/200',
-    },
-  ],
-]);
 
 export default mockAxios;
