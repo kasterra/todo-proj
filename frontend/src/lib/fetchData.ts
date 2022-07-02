@@ -67,43 +67,49 @@ export const getUserInfoByEmail = (email: string) =>
     params: { email },
   });
 
-export const getTeamInfoByTeamName = (teamName: string) => {
+export const getTeamInfoByTeamName = async (teamName: string) => {
   const token = getRecoil(authAtom).AccessToken;
-  return axios
-    .get(`${process.env.REACT_APP_API_BASE_URL}/team/${teamName}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .catch(() => {
-      refreshToken();
-      throw new Error('401');
-    });
+  try {
+    return await axios.get(
+      `${process.env.REACT_APP_API_BASE_URL}/team/${teamName}`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+  } catch {
+    refreshToken();
+    throw new Error('401');
+  }
 };
 
-export const getTeamList = () => {
+export const getTeamList = async () => {
   const token = getRecoil(authAtom).AccessToken;
-  return axios
-    .get<TeamListType[]>(`${process.env.REACT_APP_API_BASE_URL}/team/`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-    .catch(() => {
-      refreshToken();
-      throw new Error('401');
-    });
+  try {
+    return await axios.get<TeamListType[]>(
+      `${process.env.REACT_APP_API_BASE_URL}/team/`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+  } catch {
+    refreshToken();
+    throw new Error('401');
+  }
 };
 
-export const postNewTeam = (teamName: string) => {
+export const postNewTeam = async (teamName: string) => {
   const token = getRecoil(authAtom).AccessToken;
   console.log('postNewTeam');
-  return axios
-    .post<TeamListType[]>(
+  try {
+    return await axios.post<TeamListType[]>(
       `${process.env.REACT_APP_API_BASE_URL}/team/`,
       {
         Name: teamName,
       },
       { headers: { Authorization: `Bearer ${token}` } },
-    )
-    .catch(() => {
-      refreshToken();
-      throw new Error('401');
-    });
+    );
+  } catch {
+    refreshToken();
+    throw new Error('401');
+  }
 };
