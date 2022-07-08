@@ -224,4 +224,55 @@ mock.onGet(new RegExp('api/team/.+')).reply(config => {
   }
 });
 
+mock.onGet('/api/user/detail').reply(config => {
+  const { userId } = config.params;
+  console.log(`hit user detail API ${userId}`);
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
+  console.log('token is okay');
+  if (userId == '1') {
+    console.log('user 1 detail');
+    return [
+      200,
+      {
+        name: 'lorem kim',
+        email: 'lorem@ipsum.com',
+      },
+    ];
+  } else {
+    console.log('another user detail');
+    return [
+      200,
+      {
+        name: 'something else',
+        email: 'lorem@dolor.edu',
+      },
+    ];
+  }
+});
+
+mock.onPut('/api/user/detail').reply(config => {
+  console.log(`hit user detail API`);
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
+  const { info } = JSON.parse(config.data);
+  const errors: string[] = [];
+
+  if (info.name === 'dup') {
+    errors.push('username already exists');
+  }
+  if (info.email === 'dup@dup.com') {
+    errors.push('email already exists');
+  }
+  if (errors.length > 0) {
+    return [400, errors];
+  }
+  console.log('info i got', info);
+  return [200];
+});
+
 export default mockAxios;

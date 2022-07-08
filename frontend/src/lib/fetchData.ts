@@ -1,18 +1,27 @@
 import { authAtom } from 'atoms/authAtoms';
+import { AxiosError } from 'axios';
 import axios from 'mockAxios';
+import toast from 'react-hot-toast';
 import { getRecoil, setRecoil } from 'recoil-nexus';
 import { teamInfoType, TeamListType, userInfoType } from 'types/apiTypes';
+import _ from 'lodash';
+
 export const queryKeys = {
   userInfoByEmail: (email: string) => ['userInfo', email] as const,
   teamInfoByTeamName: (teamName: string) => ['teamInfo', teamName] as const,
   teamInfoByTeamId: (teamId: string) => ['teamInfo', teamId] as const,
   teamList: ['teamList'] as const,
+  userDetail: ['userDetail'] as const,
 };
 
 const refreshToken = async () => {
   console.log('Refreshing refresh token');
   const RefreshToken = getRecoil(authAtom).RefreshToken;
-  const res = await requestTokenRefresh(RefreshToken);
+  const res = await toast.promise(requestTokenRefresh(RefreshToken), {
+    loading: 'Token Expired... trying refresh',
+    success: 'Refresh successful!',
+    error: 'Refresh failed',
+  });
   setRecoil(authAtom, {
     AccessToken: res.data.AccessToken,
     RefreshToken: res.data.RefreshToken,
@@ -76,9 +85,13 @@ export const getTeamInfoByTeamName = async (teamName: string) => {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
-  } catch {
-    refreshToken();
-    throw new Error('401');
+  } catch (e) {
+    const errObj = e as AxiosError;
+    const errorCode = _.last(errObj.message.split(' '));
+    if (errorCode === '401') {
+      refreshToken();
+    }
+    throw new Error(errObj.message);
   }
 };
 
@@ -91,9 +104,13 @@ export const getTeamList = async () => {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
-  } catch {
-    refreshToken();
-    throw new Error('401');
+  } catch (e) {
+    const errObj = e as AxiosError;
+    const errorCode = _.last(errObj.message.split(' '));
+    if (errorCode === '401') {
+      refreshToken();
+    }
+    throw new Error(errObj.message);
   }
 };
 
@@ -108,8 +125,53 @@ export const postNewTeam = async (teamName: string) => {
       },
       { headers: { Authorization: `Bearer ${token}` } },
     );
-  } catch {
-    refreshToken();
-    throw new Error('401');
+  } catch (e) {
+    const errObj = e as AxiosError;
+    const errorCode = _.last(errObj.message.split(' '));
+    if (errorCode === '401') {
+      refreshToken();
+    }
+    throw new Error(errObj.message);
+  }
+};
+
+export const getUserDetail = async (userId: string) => {
+  const token = getRecoil(authAtom).AccessToken;
+  try {
+    return await axios.get<userInfoType>(
+      `${process.env.REACT_APP_API_BASE_URL}/user/detail`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { userId },
+      },
+    );
+  } catch (e) {
+    const errObj = e as AxiosError;
+    const errorCode = _.last(errObj.message.split(' '));
+    if (errorCode === '401') {
+      refreshToken();
+    }
+    throw new Error(errObj.message);
+  }
+};
+
+export const updateUserInfo = async (userId: string, info: userInfoType) => {
+  const token = getRecoil(authAtom).AccessToken;
+  try {
+    return await axios.put(
+      `${process.env.REACT_APP_API_BASE_URL}/user/detail`,
+      {
+        userId,
+        info,
+      },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+  } catch (e) {
+    const errObj = e as AxiosError;
+    const errorCode = _.last(errObj.message.split(' '));
+    if (errorCode === '401') {
+      refreshToken();
+    }
+    throw new Error(errObj.message);
   }
 };
