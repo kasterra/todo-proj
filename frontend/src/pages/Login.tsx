@@ -68,7 +68,11 @@ const Login = () => {
       <Link to="/">
         <img src="/logo/main%20logo.svg" alt="main logo" />
       </Link>
-      <FormBoxContainer>
+      <FormBoxContainer
+        css={css`
+          margin-top: 24px;
+        `}
+      >
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
           <Title
             css={css`

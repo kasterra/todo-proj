@@ -3,7 +3,6 @@ import { theme as chakraTheme } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 export const FormBoxContainer = styled.div`
-  margin-top: 22px;
   background-color: #fff;
   border: 1px solid ${chakraTheme.colors.gray[200]};
   box-shadow: ${chakraTheme.shadows.base};
@@ -41,6 +40,7 @@ export const Input = styled.input`
   border-radius: 4px;
   padding: 6px 12px;
   width: 100%;
+  height: 40px;
   &::placeholder {
     font-weight: 400;
     font-size: 14px;

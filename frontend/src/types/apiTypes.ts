@@ -20,7 +20,7 @@ export interface TeamListType {
 }
 
 export interface userInfoType {
-  image: string;
+  image?: string;
   name: string;
   email: string;
 }
