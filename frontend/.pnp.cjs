@@ -41,7 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/user-event", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.5.0"],\
             ["@types/eslint", "npm:8.4.2"],\
             ["@types/jest", "npm:27.5.1"],\
-            ["@types/lodash", "npm:4.14.182"],\
+            ["@types/lodash-es", "npm:4.17.6"],\
             ["@types/node", "npm:16.11.36"],\
             ["@types/prettier", "npm:2.6.3"],\
             ["@types/react", "npm:18.0.9"],\
@@ -64,7 +64,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react-hooks", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:4.7.0-next-a4bed4696-20220627"],\
             ["eslint-plugin-testing-library", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:5.5.1"],\
             ["framer-motion", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:6.3.6"],\
-            ["lodash", "npm:4.17.21"],\
+            ["lodash-es", "npm:4.17.21"],\
             ["prettier", "npm:2.6.2"],\
             ["react", "npm:18.1.0"],\
             ["react-beautiful-dnd", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.1.0"],\
@@ -6461,6 +6461,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         ["npm:4.14.182", {\
           "packageLocation": "./.yarn/cache/@types-lodash-npm-4.14.182-1073aac722-7dd137aa9d.zip/node_modules/@types/lodash/",\
           "packageDependencies": [\
+            ["@types/lodash", "npm:4.14.182"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/lodash-es", [\
+        ["npm:4.17.6", {\
+          "packageLocation": "./.yarn/cache/@types-lodash-es-npm-4.17.6-fd5abbdc74-9bd239dd52.zip/node_modules/@types/lodash-es/",\
+          "packageDependencies": [\
+            ["@types/lodash-es", "npm:4.17.6"],\
             ["@types/lodash", "npm:4.14.182"]\
           ],\
           "linkType": "HARD"\
@@ -13872,6 +13882,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["lodash-es", [\
+        ["npm:4.17.21", {\
+          "packageLocation": "./.yarn/cache/lodash-es-npm-4.17.21-b45832dfce-05cbffad6e.zip/node_modules/lodash-es/",\
+          "packageDependencies": [\
+            ["lodash-es", "npm:4.17.21"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["lodash.debounce", [\
         ["npm:4.0.8", {\
           "packageLocation": "./.yarn/cache/lodash.debounce-npm-4.0.8-f1d6e09799-a3f527d22c.zip/node_modules/lodash.debounce/",\
@@ -19231,7 +19250,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/user-event", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.5.0"],\
             ["@types/eslint", "npm:8.4.2"],\
             ["@types/jest", "npm:27.5.1"],\
-            ["@types/lodash", "npm:4.14.182"],\
+            ["@types/lodash-es", "npm:4.17.6"],\
             ["@types/node", "npm:16.11.36"],\
             ["@types/prettier", "npm:2.6.3"],\
             ["@types/react", "npm:18.0.9"],\
@@ -19254,7 +19273,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react-hooks", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:4.7.0-next-a4bed4696-20220627"],\
             ["eslint-plugin-testing-library", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:5.5.1"],\
             ["framer-motion", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:6.3.6"],\
-            ["lodash", "npm:4.17.21"],\
+            ["lodash-es", "npm:4.17.21"],\
             ["prettier", "npm:2.6.2"],\
             ["react", "npm:18.1.0"],\
             ["react-beautiful-dnd", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.1.0"],\

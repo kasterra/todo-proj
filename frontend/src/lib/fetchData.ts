@@ -4,7 +4,7 @@ import axios from 'mockAxios';
 import toast from 'react-hot-toast';
 import { getRecoil, setRecoil } from 'recoil-nexus';
 import { teamInfoType, TeamListType, userInfoType } from 'types/apiTypes';
-import _ from 'lodash';
+import _ from 'lodash-es';
 
 export const queryKeys = {
   userInfoByEmail: (email: string) => ['userInfo', email] as const,
