@@ -15,6 +15,7 @@
     "axios": "^0.27.2",
     "emotion-normalize": "^11.0.1",
     "framer-motion": "^6.3.6",
+    "lodash": "^4.17.21",
     "react": "^18.1.0",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^18.1.0",
@@ -57,6 +58,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@types/eslint": "^8",
+    "@types/lodash": "^4",
     "@types/prettier": "^2",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@typescript-eslint/eslint-plugin": "^5.27.0",

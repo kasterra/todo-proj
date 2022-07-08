@@ -3670,7 +3670,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:*":
+"@types/lodash@npm:*, @types/lodash@npm:^4":
   version: 4.14.182
   resolution: "@types/lodash@npm:4.14.182"
   checksum: 7dd137aa9dbabd632408bd37009d984655164fa1ecc3f2b6eb94afe35bf0a5852cbab6183148d883e9c73a958b7fec9a9bcf7c8e45d41195add6a18c34958209
@@ -13290,6 +13290,7 @@ __metadata:
     "@testing-library/user-event": ^13.5.0
     "@types/eslint": ^8
     "@types/jest": ^27.5.1
+    "@types/lodash": ^4
     "@types/node": ^16.11.36
     "@types/prettier": ^2
     "@types/react": ^18.0.9
@@ -13312,6 +13313,7 @@ __metadata:
     eslint-plugin-react-hooks: next
     eslint-plugin-testing-library: ^5.5.1
     framer-motion: ^6.3.6
+    lodash: ^4.17.21
     prettier: ^2.6.2
     react: ^18.1.0
     react-beautiful-dnd: ^13.1.0

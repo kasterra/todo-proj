@@ -41,6 +41,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/user-event", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.5.0"],\
             ["@types/eslint", "npm:8.4.2"],\
             ["@types/jest", "npm:27.5.1"],\
+            ["@types/lodash", "npm:4.14.182"],\
             ["@types/node", "npm:16.11.36"],\
             ["@types/prettier", "npm:2.6.3"],\
             ["@types/react", "npm:18.0.9"],\
@@ -63,6 +64,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react-hooks", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:4.7.0-next-a4bed4696-20220627"],\
             ["eslint-plugin-testing-library", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:5.5.1"],\
             ["framer-motion", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:6.3.6"],\
+            ["lodash", "npm:4.17.21"],\
             ["prettier", "npm:2.6.2"],\
             ["react", "npm:18.1.0"],\
             ["react-beautiful-dnd", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.1.0"],\
@@ -19229,6 +19231,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/user-event", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.5.0"],\
             ["@types/eslint", "npm:8.4.2"],\
             ["@types/jest", "npm:27.5.1"],\
+            ["@types/lodash", "npm:4.14.182"],\
             ["@types/node", "npm:16.11.36"],\
             ["@types/prettier", "npm:2.6.3"],\
             ["@types/react", "npm:18.0.9"],\
@@ -19251,6 +19254,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-react-hooks", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:4.7.0-next-a4bed4696-20220627"],\
             ["eslint-plugin-testing-library", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:5.5.1"],\
             ["framer-motion", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:6.3.6"],\
+            ["lodash", "npm:4.17.21"],\
             ["prettier", "npm:2.6.2"],\
             ["react", "npm:18.1.0"],\
             ["react-beautiful-dnd", "virtual:dadc55b5a3615c87a38c0f31cc51222597d7809661764b01f3c8d488198b1561544d181028d8bb31f4529d5d7e7c5cf60b0960c1a809103b09e4d700302f0d66#npm:13.1.0"],\
