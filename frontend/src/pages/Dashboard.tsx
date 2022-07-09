@@ -89,7 +89,7 @@ const Dashboard = () => {
           Team DashBoard
         </MenuTab>
         <MenuTab
-          to="user/222"
+          to="user/1"
           active={window.location.href.includes('/user') || undefined}
         >
           User DashBoard

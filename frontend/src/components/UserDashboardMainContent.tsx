@@ -13,18 +13,20 @@ import {
 import { useForm } from 'react-hook-form';
 import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
-import { getUserDetail, queryKeys, updateUserInfo } from 'lib/fetchData';
+import {
+  getUserDetail,
+  getUserTeamDetail,
+  queryKeys,
+  updateUserInfo,
+} from 'lib/fetchData';
 import {
   faCrown,
   faUser,
   faUserShield,
+  IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import toast from 'react-hot-toast';
-
-/* TODO :Server side error 붙이기
-https://stackoverflow.com/questions/64469861/react-hook-form-handling-server-side-errors-in-handlesubmit
-*/
 
 const Container = styled.div`
   display: flex;
@@ -133,6 +135,9 @@ interface props {
 const UserDashBoardMainContent = ({ userId }: props) => {
   const [isLoading, setIsLoading] = useState(false);
   const { data } = useQuery(queryKeys.userDetail, () => getUserDetail(userId));
+  const { data: teamList } = useQuery(queryKeys.userTeamDetail, () =>
+    getUserTeamDetail(userId),
+  );
   const {
     register,
     handleSubmit,
@@ -154,6 +159,9 @@ const UserDashBoardMainContent = ({ userId }: props) => {
           loading: 'Requesting update to server',
           success: 'Updated successfully',
           error: 'server error',
+        })
+        .catch(e => {
+          console.log(JSON.parse(e.message));
         })
         .finally(() => setIsLoading(false));
     },
@@ -286,115 +294,35 @@ const UserDashBoardMainContent = ({ userId }: props) => {
           >
             Manage your team
           </Title>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faCrown} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : owner</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faUserShield} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : admin</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faUser} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : user</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faUser} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : user</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faUser} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : user</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faUser} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : user</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faUser} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : user</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <TeamCardRow>
-            <TeamCard>
-              <FontAwesomeIcon icon={faUser} />
-              <div>
-                <h3>Team Lorem</h3>
-                <h4>your role : user</h4>
-              </div>
-            </TeamCard>
-            <LeaveBtn>
-              <span>Leave Team</span>
-              <img src="/icons/log-out-04-w.svg" alt="Log Out" />
-            </LeaveBtn>
-          </TeamCardRow>
-          <AddBtn
-            css={css`
-              height: 100%;
-            `}
-          >
+          {teamList?.data.map(element => {
+            let icon: IconDefinition;
+            switch (element.role) {
+              case 'admin':
+                icon = faUserShield;
+                break;
+              case 'owner':
+                icon = faCrown;
+                break;
+              case 'user':
+                icon = faUser;
+                break;
+            }
+            return (
+              <TeamCardRow key={element.teamId}>
+                <TeamCard>
+                  <FontAwesomeIcon icon={icon} />
+                  <div>
+                    <h3>{element.teamName}</h3>
+                    <h4>your role : {element.role}</h4>
+                  </div>
+                </TeamCard>
+                <LeaveBtn>
+                  Leave Team <img src="/icons/log-out-04-w.svg" alt="log out" />
+                </LeaveBtn>
+              </TeamCardRow>
+            );
+          })}
+          <AddBtn>
             <img src="/icons/add-green-btn.svg" alt="plus icon" />
           </AddBtn>
         </FormBoxContainer>

@@ -24,3 +24,9 @@ export interface userInfoType {
   name: string;
   email: string;
 }
+
+export interface userTeamDetailType {
+  teamName: string;
+  role: 'admin' | 'owner' | 'user';
+  teamId: string;
+}

@@ -275,4 +275,36 @@ mock.onPut('/api/user/detail').reply(config => {
   return [200];
 });
 
+mock.onGet('api/user/team').reply(config => {
+  const { userId } = config.params;
+  console.log(`hit user detail API ${userId}`);
+  const auth = config.headers?.Authorization as string;
+  if (!auth) return [401];
+  const accessToken = auth.split(' ')[1];
+  if (checkTokenHasFail(accessToken)) return [401];
+  console.log('token is okay');
+  if (userId === '1') {
+    return [
+      200,
+      [
+        {
+          teamName: 'Team Lorem',
+          role: 'admin',
+          teamId: '1',
+        },
+        {
+          teamName: 'Team Ipsum',
+          role: 'owner',
+          teamId: '2',
+        },
+        {
+          teamName: 'Team Dolor',
+          role: 'user',
+          teamId: '3',
+        },
+      ],
+    ];
+  } else return [200, []];
+});
+
 export default mockAxios;

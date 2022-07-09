@@ -3,7 +3,12 @@ import { AxiosError } from 'axios';
 import axios from 'mockAxios';
 import toast from 'react-hot-toast';
 import { getRecoil, setRecoil } from 'recoil-nexus';
-import { teamInfoType, TeamListType, userInfoType } from 'types/apiTypes';
+import {
+  teamInfoType,
+  TeamListType,
+  userInfoType,
+  userTeamDetailType,
+} from 'types/apiTypes';
 import _ from 'lodash-es';
 
 export const queryKeys = {
@@ -12,6 +17,7 @@ export const queryKeys = {
   teamInfoByTeamId: (teamId: string) => ['teamInfo', teamId] as const,
   teamList: ['teamList'] as const,
   userDetail: ['userDetail'] as const,
+  userTeamDetail: ['userTeamDetail'] as const,
 };
 
 const refreshToken = async () => {
@@ -91,7 +97,7 @@ export const getTeamInfoByTeamName = async (teamName: string) => {
     if (errorCode === '401') {
       refreshToken();
     }
-    throw new Error(errObj.message);
+    throw new Error(JSON.stringify(errObj.toJSON()));
   }
 };
 
@@ -110,7 +116,7 @@ export const getTeamList = async () => {
     if (errorCode === '401') {
       refreshToken();
     }
-    throw new Error(errObj.message);
+    throw new Error(JSON.stringify(errObj.toJSON()));
   }
 };
 
@@ -131,7 +137,7 @@ export const postNewTeam = async (teamName: string) => {
     if (errorCode === '401') {
       refreshToken();
     }
-    throw new Error(errObj.message);
+    throw new Error(JSON.stringify(errObj.toJSON()));
   }
 };
 
@@ -151,7 +157,7 @@ export const getUserDetail = async (userId: string) => {
     if (errorCode === '401') {
       refreshToken();
     }
-    throw new Error(errObj.message);
+    throw new Error(JSON.stringify(errObj.toJSON()));
   }
 };
 
@@ -172,6 +178,26 @@ export const updateUserInfo = async (userId: string, info: userInfoType) => {
     if (errorCode === '401') {
       refreshToken();
     }
-    throw new Error(errObj.message);
+    throw new Error(JSON.stringify(errObj.toJSON()));
+  }
+};
+
+export const getUserTeamDetail = async (userId: string) => {
+  const token = getRecoil(authAtom).AccessToken;
+  try {
+    return await axios.get<userTeamDetailType[]>(
+      `${process.env.REACT_APP_API_BASE_URL}/user/team`,
+      {
+        params: { userId },
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+  } catch (e) {
+    const errObj = e as AxiosError;
+    const errorCode = _.last(errObj.message.split(' '));
+    if (errorCode === '401') {
+      refreshToken();
+    }
+    throw new Error(JSON.stringify(errObj.toJSON()));
   }
 };
