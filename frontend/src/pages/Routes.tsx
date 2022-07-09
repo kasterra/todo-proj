@@ -6,7 +6,7 @@ import {
 import Dashboard from './Dashboard';
 import Home from './Home';
 import Login from './Login';
-import UserDashBoard from './UserDashBoard';
+import UserDashboard from './UserDashboard';
 import Signup from './Signup';
 import TeamDashboard from './TeamDashboard';
 
@@ -20,7 +20,7 @@ const Routes = () => {
         <Route path="/dashboard" element={<Dashboard />}>
           <Route path="team" element={<TeamDashboard />} />
           <Route path="team/:teamId" element={<TeamDashboard />} />
-          <Route path="user/:userId" element={<UserDashBoard />} />
+          <Route path="user/:userId" element={<UserDashboard />} />
         </Route>
       </ReactRouterRoutes>
     </Router>
